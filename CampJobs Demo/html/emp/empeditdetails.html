@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employer Details</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .nav-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px;
+        background-color: #161744;
+        color: white;
+        height: 50px;
+        position: relative;
+    z-index: 1000; /* Ensures it stays on top */
+    }
+
+    .logo {
+        font-size: 24px;
+    }
+
+    .logo span {
+        color: orange;
+    }
+
+    .nav-links {
+        list-style: none;
+        display: flex;
+        gap: 15px;
+    }
+
+    .nav-links li {
+        display: flex;
+    }
+
+    .nav-links a {
+        display: block;
+        position: relative;
+        padding: 10px 15px;
+        text-decoration: none;
+        color: white;
+        font-size: 1rem;
+        transition: transform 0.3s ease, background-color 0.3s ease;
+        pointer-events: auto; /* Ensure links are clickable */
+    }
+
+    .nav-links li:not(:last-child)::after {
+        content: "";
+        position: absolute;
+        right: 0;
+        top: 50%;
+        height: 60%;
+        width: 2px;
+        background-color: white;
+        transform: translateY(-50%);
+    }
+
+    .nav-links a:hover {
+        transform: scale(1.2);
+        text-decoration: underline;
+        cursor: pointer;
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* .logo {
+            width: 120px;
+            height: 120px;
+            background-color: #ddd;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 20px auto;
+            border-radius: 50%;
+            overflow: hidden;
+            position: relative;
+        } */
+
+        /* .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        } */
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        input[readonly] {
+            background-color: #f9f9f9;
+            cursor: not-allowed;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4a4af4;
+            color: white;
+        }
+
+        button:hover {
+            background-color: #3a3ad4;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 600px;
+            max-width: 90%;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .form-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+
+        button {
+            flex: 1;
+            margin: 0 5px;
+        }
+        footer {
+        background-color: #161744;
+        color: white;
+        text-align: center;
+        padding: 10px;
+        margin-top: 20px;
+    }
+
+    .footer-content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .footer-content p {
+        margin: 0;
+    }
+
+    .social-links a {
+        color: white;
+        text-decoration: none;
+        margin: 0 10px;
+    }
+
+    .social-links a:hover {
+        color: orange;
+    }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="nav-container">
+            <h1 class="logo">Camp<span>Jobs</span></h1>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="emphomepage.html">Home</a></li>
+                    <li><a href="postjob.html">Post a Job</a></li>
+                    <li><a href="empjobs.html">My Jobs</a></li>
+                    <li><a href="empapplications.html">Applications</a></li>
+                    <li><a href="empeditdetails.html">My Profile</a></li>
+                    <li><a href="empaboutus.html">About Us</a></li>
+                    <li><a href="empcontactus.html">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="user-info">
+                <div class="dropdown">
+                    <button class="dropbtn">Log out <i class="fas fa-sign-out-alt"></i></button>
+                    <div class="dropdown-content">
+                        <a href="#" onclick="confirmLogout()">Log Out</a>
+                    </div>
+                </div>
+            </div>
+        </div>   
+    </header>
+    <div class="container">
+        <!-- Logo Section -->
+        <!-- <div class="logo">
+            <img src="default-logo.png" alt="Logo" id="logoImage">
+        </div> -->
+
+        <!-- Employer Details (Non-Editable) -->
+        <div id="employerDetails">
+            <div class="form-group">
+                <label for="empName">Employer Name:</label>
+                <input type="text" id="empName" readonly>
+            </div>
+            <div class="form-group">
+                <label for="empContact">Contact:</label>
+                <input type="text" id="empContact" readonly>
+            </div>
+            <div class="form-group">
+                <label for="empAddress">Address:</label>
+                <input type="text" id="empAddress" readonly>
+            </div>
+            <div class="form-group">
+                <label for="empIndustry">Industry:</label>
+                <input type="text" id="empIndustry" readonly>
+            </div>
+            <div class="form-group">
+                <label for="empWebsite">Website:</label>
+                <input type="text" id="empWebsite" readonly>
+            </div>
+            <div class="form-group">
+                <label for="empDesc">Description:</label>
+                <input type="text" id="empDesc" readonly>
+            </div>
+            <button type="button" id="editButton">Edit Details</button>
+        </div>
+
+        <!-- Modal for Editing Details -->
+        <div id="editModal" class="modal">
+            <div class="modal-content">
+                <h2>Edit Details</h2>
+                <form id="editForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="editEmpName">Employer Name:</label>
+                            <input type="text" id="editEmpName">
+                        </div>
+                        <div class="form-group">
+                            <label for="editEmpContact">Contact:</label>
+                            <input type="text" id="editEmpContact">
+                        </div>
+                        <div class="form-group">
+                            <label for="editEmpAddress">Address:</label>
+                            <input type="text" id="editEmpAddress">
+                        </div>
+                        <div class="form-group">
+                            <label for="editEmpIndustry">Industry:</label>
+                            <input type="text" id="editEmpIndustry">
+                        </div>
+                        <div class="form-group">
+                            <label for="editEmpWebsite">Website:</label>
+                            <input type="text" id="editEmpWebsite">
+                        </div>
+                        <div class="form-group">
+                            <label for="editEmpDesc">Description:</label>
+                            <input type="text" id="editEmpDesc">
+                        </div>
+                    </div>
+                    <div class="form-buttons">
+                        <button type="button" id="saveEditButton">Save</button>
+                        <button type="button" id="cancelEditButton">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 CampJobs</p>
+            <div class="social-links">
+                <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook"></i></a>
+                <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </footer>
+    <script>
+document.addEventListener('DOMContentLoaded', async function () {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        alert('Please log in first.');
+        window.location.href = '/html/shared/login.html';
+        return;
+    }
+
+    console.log("🔑 Token:", token);
+
+    let userId;
+    let empId = null; // Store empId globally
+
+    try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        userId = payload.userId;
+        console.log("✅ Retrieved User ID:", userId);
+    } catch (error) {
+        console.error("❌ Error decoding token:", error);
+        alert("Invalid session. Please log in again.");
+        window.location.href = '/login.html';
+        return;
+    }
+
+    // Fetch Employer ID using User ID
+    async function fetchEmployerId(userId) {
+        try {
+            const response = await fetch(`http://localhost:8081/api/employer/getEmpId/${userId}`, {
+    method: "GET",
+    headers: {
+        "Authorization": `Bearer ${token}`, // Correct string interpolation
+    }
+});
+
+
+            if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+
+            const data = await response.json();
+            return data; // Return employer ID
+        } catch (error) {
+            console.error("❌ Failed to fetch employer ID:", error);
+            alert(`Failed to fetch employer ID: ${error.message}`);
+        }
+    }
+
+    // Fetch Employer Details
+    async function fetchEmployerDetails(empId) {
+        try {
+            const response = await fetch(`http://localhost:8081/api/employer/details/${empId}`, {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Cache-Control": "no-cache"
+                }
+            });
+
+            if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+
+            const employerData = await response.json();
+            console.log("📢 Full API Response:", employerData);
+
+            if (!employerData || !employerData.empId) throw new Error("Invalid employer data received.");
+
+            // Populate details form
+            document.getElementById('empName').value = employerData.empName || '';
+            document.getElementById('empContact').value = employerData.empContact || '';
+            document.getElementById('empAddress').value = employerData.empAddress || '';
+            document.getElementById('empIndustry').value = employerData.empIndustry || '';
+            document.getElementById('empWebsite').value = employerData.empWebsite || '';
+            document.getElementById('empDesc').value = employerData.empDesc || '';
+
+            // Populate edit modal
+            document.getElementById('editEmpName').value = employerData.empName || '';
+            document.getElementById('editEmpContact').value = employerData.empContact || '';
+            document.getElementById('editEmpAddress').value = employerData.empAddress || '';
+            document.getElementById('editEmpIndustry').value = employerData.empIndustry || '';
+            document.getElementById('editEmpWebsite').value = employerData.empWebsite || '';
+            document.getElementById('editEmpDesc').value = employerData.empDesc || '';
+
+        } catch (error) {
+            console.error("❌ Failed to fetch employer details:", error);
+            alert(`Failed to load employer details: ${error.message}`);
+        }
+    }
+
+    // Open edit modal
+    document.getElementById('editButton').addEventListener('click', function () {
+        document.getElementById('editModal').style.display = 'flex';
+    });
+
+    // Close edit modal
+    document.getElementById('cancelEditButton').addEventListener('click', function () {
+        document.getElementById('editModal').style.display = 'none';
+    });
+
+    // Save edited details
+    document.getElementById('saveEditButton').addEventListener('click', async function () {
+        if (!empId) {
+            alert("Employer ID not found. Cannot update details.");
+            return;
+        }
+
+        const updatedData = {
+            empName: document.getElementById('editEmpName').value,
+            empContact: document.getElementById('editEmpContact').value,
+            empAddress: document.getElementById('editEmpAddress').value,
+            empIndustry: document.getElementById('editEmpIndustry').value,
+            empWebsite: document.getElementById('editEmpWebsite').value,
+            empDesc: document.getElementById('editEmpDesc').value
+        };
+
+        console.log("📤 Sending Data:", updatedData);
+
+        try {
+            const response = await fetch(`http://localhost:8081/api/employer/update/${empId}`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updatedData),
+            });
+
+            const responseText = await response.text();
+            console.log("🔄 API Response:", responseText);
+
+            if (response.ok) {
+                alert('Details updated successfully!');
+                window.location.reload();
+            } else {
+                throw new Error(`Update failed! Status: ${response.status} - ${responseText}`);
+            }
+        } catch (error) {
+            console.error("❌ Failed to update details:", error);
+            alert(`Failed to update details: ${error.message}`);
+        }
+    });
+
+    // Fetch employer ID and details on page load
+    empId = await fetchEmployerId(userId); // Assign the returned value to the global empId
+    if (empId) {
+        await fetchEmployerDetails(empId);
+    }
+
+    function confirmLogout() {
+            if (confirm('Are you sure you want to log out?')) {
+                localStorage.removeItem('token');
+                window.location.href = '/html/shared/login.html';
+            }
+        }
+});
+    </script>
+</body>
+</html>

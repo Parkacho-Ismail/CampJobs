@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us & Contact Us - CampJobs</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+     body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #464444;
+            color: white;
+        }
+
+    .nav-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px;
+        background-color: #161744;
+        color: white;
+        height: 50px;
+        position: relative;
+    z-index: 1000; /* Ensures it stays on top */
+    }
+
+    .logo {
+        font-size: 24px;
+    }
+
+    .logo span {
+        color: orange;
+    }
+
+    .nav-links {
+        list-style: none;
+        display: flex;
+        gap: 15px;
+    }
+
+    .nav-links li {
+        display: flex;
+    }
+
+    .nav-links a {
+        display: block;
+        position: relative;
+        padding: 10px 15px;
+        text-decoration: none;
+        color: white;
+        font-size: 1rem;
+        transition: transform 0.3s ease, background-color 0.3s ease;
+        pointer-events: auto; /* Ensure links are clickable */
+    }
+
+    .nav-links li:not(:last-child)::after {
+        content: "";
+        position: absolute;
+        right: 0;
+        top: 50%;
+        height: 60%;
+        width: 2px;
+        background-color: white;
+        transform: translateY(-50%);
+    }
+
+    .nav-links a:hover {
+        transform: scale(1.2);
+        text-decoration: underline;
+        cursor: pointer;
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+         .container {
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+            text-align: center;
+        }
+        .contact-form input, .contact-form textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+        }
+        .contact-form button {
+            background-color: orange;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .contact-form button:hover {
+            background-color: #ffbb33;
+        }
+        footer {
+        background-color: #161744;
+        color: white;
+        text-align: center;
+        padding: 10px;
+        margin-top: 20px;
+        position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    }
+
+    .footer-content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .footer-content p {
+        margin: 0;
+    }
+
+    .social-links a {
+        color: white;
+        text-decoration: none;
+        margin: 0 10px;
+    }
+
+    .social-links a:hover {
+        color: orange;
+    }
+    .spinner {
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        border-top: 3px solid #fff;
+        border-radius: 50%;
+        width: 15px;
+        height: 15px;
+        display: inline-block;
+        animation: spin 1s linear infinite;
+        margin-left: 8px;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="nav-container">
+            <h1 class="logo">Camp<span>Jobs</span></h1>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="seekerhomepage.html">Home</a></li>
+                    <li><a href="seekerhomepage.html#job-cards">Jobs</a></li>
+                    <li><a href="seekerapplications.html">My Applications </a></li>
+                    <li><a href="seekereditdetails.html">My Profile</a></li>
+                    <li><a href="seekeraboutus.html">About Us</a></li>
+                    <li><a href="seekercontactus.html">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="user-info">
+                <div class="dropdown">
+                    <button class="dropbtn">Log out <i class="fas fa-sign-out-alt"></i></button>
+                    <div class="dropdown-content">
+                        <a href="#" onclick="confirmLogout()">Log Out</a>
+                    </div>
+                </div>
+            </div>
+        </div>   
+    </header>
+
+    <section class="container">
+        <h2>Get in Touch</h2>
+        <p>If you have any questions or inquiries, feel free to reach out to us using the form below:</p>
+        <form id="contactForm" class="contact-form">
+            <input type="text" id="name" placeholder="Your Name" required>
+            <input type="email" id="email" placeholder="Your Email" required>
+            <textarea id="message" rows="5" placeholder="Your Message" required></textarea>
+            <button type="submit" id="sendButton">
+                Send Message <span id="loadingSpinner" class="spinner" style="display: none;"></span>
+            </button>
+        </form>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 CampJobs</p>
+            <div class="social-links">
+                <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook"></i></a>
+                <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const token = localStorage.getItem('token');
+            console.log("Token:", token);
+    
+            if (!token) {
+                window.location.href = '/html/shared/login.html';
+            }
+    
+            document.getElementById("contactForm").addEventListener("submit", async function(event) {
+                event.preventDefault();
+    
+                const name = document.getElementById("name").value.trim();
+                const email = document.getElementById("email").value.trim();
+                const message = document.getElementById("message").value.trim();
+                const sendButton = document.getElementById("sendButton");
+                const loadingSpinner = document.getElementById("loadingSpinner");
+    
+                if (!name || !email || !message) {
+                    alert("All fields are required.");
+                    return;
+                }
+    
+                // Show loading state
+                sendButton.disabled = true;
+                loadingSpinner.style.display = "inline-block";
+    
+                try {
+                    const response = await fetch("http://localhost:8081/api/contact/send", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ senderName: name, senderEmail: email, messageContent: message })
+                    });
+    
+                    if (!response.ok) throw new Error("Failed to send email.");
+                    
+                    const result = await response.text();
+                    alert(result);
+                    document.getElementById("contactForm").reset();
+                } catch (error) {
+                    console.error("Error sending email:", error);
+                    alert("An error occurred. Please try again.");
+                } finally {
+                    // Restore button state
+                    sendButton.disabled = false;
+                    loadingSpinner.style.display = "none";
+                }
+            });
+        });
+    
+        function confirmLogout() {
+            if (confirm('Are you sure you want to log out?')) {
+                localStorage.removeItem('token');
+                window.location.href = '/html/shared/login.html';
+            }
+        }
+    </script>
+</body>
+</html>

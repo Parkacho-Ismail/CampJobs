@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us & Contact Us - CampJobs</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+            body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        text-align: center;
+    }
+.header{
+    position: fixed;
+
+}
+    .nav-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px;
+        background-color: #161744;
+        color: white;
+        height: 50px;
+        position: relative;
+    z-index: 1000; /* Ensures it stays on top */
+    }
+
+    .logo {
+        font-size: 24px;
+    }
+
+    .logo span {
+        color: orange;
+    }
+
+    .nav-links {
+        list-style: none;
+        display: flex;
+        gap: 15px;
+    }
+
+    .nav-links li {
+        display: flex;
+    }
+
+    .nav-links a {
+        display: block;
+        position: relative;
+        padding: 10px 15px;
+        text-decoration: none;
+        color: white;
+        font-size: 1rem;
+        transition: transform 0.3s ease, background-color 0.3s ease;
+        pointer-events: auto; /* Ensure links are clickable */
+    }
+
+    .nav-links li:not(:last-child)::after {
+        content: "";
+        position: absolute;
+        right: 0;
+        top: 50%;
+        height: 60%;
+        width: 2px;
+        background-color: white;
+        transform: translateY(-50%);
+    }
+
+    .nav-links a:hover {
+        transform: scale(1.2);
+        text-decoration: underline;
+        cursor: pointer;
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+            footer {
+        background-color: #161744;
+        color: white;
+        text-align: center;
+        padding: 10px;
+        margin-top: 20px;
+        width: 100%;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    }
+
+    .footer-content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .footer-content p {
+        margin: 0;
+    }
+
+    .social-links a {
+        color: white;
+        text-decoration: none;
+        margin: 0 10px;
+    }
+
+    .social-links a:hover {
+        color: orange;
+    }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="nav-container">
+            <h1 class="logo">Camp<span>Jobs</span></h1>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="landingaboutus.html">About us</a></li>
+                        <li><a href="landingpage.html">Jobs</a></li>
+                        <li><a href="landingcontact.html">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="user-info">
+                <div class="dropdown">
+                </div>
+            </div>
+        </div>   
+    </header>
+    <section class="container">
+        <h2>Welcome to CampJobs</h2>
+        <p>CampJobs is an innovative online platform designed to bridge the employment gap by connecting refugees and the host community with job opportunities provided by NGOs, businesses, and other employers. Our goal is to simplify the job-seeking process by offering an efficient and secure digital solution that eliminates the need for unsafe travel and manual job applications.</p>
+        <p>In many refugee camps, access to employment opportunities remains limited, and job seekers often struggle to find positions that match their skills. Employers, on the other hand, face difficulties in reaching qualified candidates. CampJobs was created to address these challenges by providing an accessible and user-friendly job portal where job seekers can explore available positions and employers can efficiently manage job postings and applications.</p>
+        <p>Our platform is built with a mission to empower individuals by promoting economic independence and self-sufficiency. We believe that access to employment is a fundamental right, and by leveraging technology, we can help individuals build better futures for themselves and their families. Whether you're a job seeker looking for meaningful employment or an employer searching for talented individuals, CampJobs is here to facilitate the connection and create opportunities for all.</p>
+        <p>At CampJobs, we are committed to continuous improvement and innovation. We work closely with NGOs, businesses, and community leaders to expand job opportunities and ensure that our platform meets the needs of both job seekers and employers. Our vision is to become the leading job portal for refugees and marginalized communities, making employment more accessible and inclusive for everyone.</p>
+    </section>
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 CampJobs</p>
+            <div class="social-links">
+                <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook"></i></a>
+                <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

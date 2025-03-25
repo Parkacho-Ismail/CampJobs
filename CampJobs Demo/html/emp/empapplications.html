@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employer Dashboard</title>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+        }
+        .nav-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px;
+        background-color: #161744;
+        color: white;
+        height: 50px;
+        position: relative;
+    z-index: 1000; /* Ensures it stays on top */
+    }
+
+    .logo {
+        font-size: 24px;
+    }
+
+    .logo span {
+        color: orange;
+    }
+
+    .nav-links {
+        list-style: none;
+        display: flex;
+        gap: 15px;
+    }
+
+    .nav-links li {
+        display: flex;
+    }
+
+    .nav-links a {
+        display: block;
+        position: relative;
+        padding: 10px 15px;
+        text-decoration: none;
+        color: white;
+        font-size: 1rem;
+        transition: transform 0.3s ease, background-color 0.3s ease;
+        pointer-events: auto; /* Ensure links are clickable */
+    }
+
+    .nav-links li:not(:last-child)::after {
+        content: "";
+        position: absolute;
+        right: 0;
+        top: 50%;
+        height: 60%;
+        width: 2px;
+        background-color: white;
+        transform: translateY(-50%);
+    }
+
+    .nav-links a:hover {
+        transform: scale(1.2);
+        text-decoration: underline;
+        cursor: pointer;
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+
+        .dashboard {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .statistics {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            flex: 1;
+            margin: 0 10px;
+        }
+
+        .stat-card h3 {
+            margin: 10px 0;
+        }
+
+        .stat-card span {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .search-bar {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+
+        .search-bar input {
+            padding: 10px;
+            width: 300px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+
+        .applications-section {
+            margin-top: 20px;
+        }
+
+        .application-table {
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: skyblue; /* Changed to sky-blue */
+        }
+
+        .status {
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .status-pending {
+            background-color: blue;
+            color: white;
+        }
+
+        .status-shortlisted {
+            background-color: yellow;
+            color: black;
+        }
+
+        .status-rejected {
+            background-color: red;
+            color: white;
+        }
+
+        .status-accepted {
+            background-color: green;
+            color: white;
+        }
+
+        .no-applications {
+            text-align: center;
+            color: #888;
+            font-style: italic;
+            margin: 20px 0;
+        }
+        footer {
+        background-color: #161744;
+        color: white;
+        text-align: center;
+        padding: 10px;
+        margin-top: 20px;
+    }
+
+    .footer-content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .footer-content p {
+        margin: 0;
+    }
+
+    .social-links a {
+        color: white;
+        text-decoration: none;
+        margin: 0 10px;
+    }
+
+    .social-links a:hover {
+        color: orange;
+    }
+     /* Add loading spinner styles */
+     .loading-spinner {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1001;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .loading-spinner i {
+            font-size: 24px;
+            color: #4CAF50;
+        }
+
+        .loading-spinner span {
+            margin-left: 10px;
+            font-size: 16px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="nav-container">
+            <h1 class="logo">Camp<span>Jobs</span></h1>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="emphomepage.html">Home</a></li>
+                    <li><a href="postjob.html">Post a Job</a></li>
+                    <li><a href="empjobs.html">My Jobs</a></li>
+                    <li><a href="empapplications.html">Applications</a></li>
+                    <li><a href="empeditdetails.html">My Profile</a></li>
+                    <li><a href="empaboutus.html">About Us</a></li>
+                    <li><a href="empcontactus.html">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="user-info">
+                <div class="dropdown">
+                    <button class="dropbtn">Log out <i class="fas fa-sign-out-alt"></i></button>
+                    <div class="dropdown-content">
+                        <a href="#" onclick="confirmLogout()">Log Out</a>
+                    </div>
+                </div>
+            </div>
+        </div>   
+    </header>
+    <div class="dashboard">
+        <div class="statistics">
+            <div class="stat-card">
+                <h3>Pending Applications</h3>
+                <span id="pendingCount">0</span>
+            </div>
+            <div class="stat-card">
+                <h3>Shortlisted Applications</h3>
+                <span id="shortlistedCount">0</span>
+            </div>
+            <div class="stat-card">
+                <h3>Rejected Applications</h3>
+                <span id="rejectedCount">0</span>
+            </div>
+            <div class="stat-card">
+                <h3>Accepted Applications</h3>
+                <span id="acceptedCount">0</span>
+            </div>
+        </div>
+
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search here...">
+        </div>
+<!-- Loading Spinner -->
+<div id="loadingSpinner" class="loading-spinner">
+    <i class="fas fa-spinner fa-spin"></i>
+    <span>Loading...</span>
+</div>
+        <div class="applications-section">
+            <div class="application-table" id="pendingTable">
+                <h4>Pending Applications</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Job</th>
+                            <!-- <th>Applicant</th> -->
+                            <th>Resume</th>
+                            <th>Letter</th>
+                            <th>Certificate</th>
+                            <th>ID Img</th>
+                            <th>Time</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pendingApplications"></tbody>
+                </table>
+                <div id="noPendingApplications" class="no-applications" style="display: none;">There are no applications currently in this category.</div>
+            </div>
+
+            <div class="application-table" id="shortlistedTable">
+                <h4>Shortlisted Applications</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Job</th>
+                            <!-- <th>Applicant</th> -->
+                            <th>Resume</th>
+                            <th>Letter</th>
+                            <th>Certificate</th>
+                            <th>ID Img</th>
+                            <th>Time</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="shortlistedApplications"></tbody>
+                </table>
+                <div id="noShortlistedApplications" class="no-applications" style="display: none;">There are no applications currently in this category.</div>
+            </div>
+
+            <div class="application-table" id="rejectedTable">
+                <h4>Rejected Applications</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Job</th>
+                            <!-- <th>Applicant</th> -->
+                            <th>Resume</th>
+                            <th>Letter</th>
+                            <th>Certificate</th>
+                            <th>ID Img</th>
+                            <th>Time</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rejectedApplications"></tbody>
+                </table>
+                <div id="noRejectedApplications" class="no-applications" style="display: none;">There are no applications currently in this category.</div>
+            </div>
+
+            <div class="application-table" id="acceptedTable">
+                <h4>Accepted Applications</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Job</th>
+                            <!-- <th>Applicant</th> -->
+                            <th>Resume</th>
+                            <th>Letter</th>
+                            <th>Certificate</th>
+                            <th>ID Img</th>
+                            <th>Time</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="acceptedApplications"></tbody>
+                </table>
+                <div id="noAcceptedApplications" class="no-applications" style="display: none;">There are no applications currently in this category.</div>
+            </div>
+        </div>
+    </div>
+     <!-- Email Modal -->
+<div id="emailModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); z-index: 1000; border-radius: 8px;">
+    <h3>Send Email to Job Seeker</h3>
+    <textarea id="emailContent" placeholder="Enter email content..." style="width: 100%; height: 150px; margin-bottom: 10px; padding: 10px; border: 1px solid #ccc; border-radius: 4px;"></textarea>
+    <div style="text-align: right;">
+        <button onclick="sendEmail()" style="padding: 8px 16px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer;">Send</button>
+        <button onclick="closeEmailModal()" style="padding: 8px 16px; background-color: #f44336; color: white; border: none; border-radius: 4px; cursor: pointer; margin-left: 10px;">Cancel</button>
+    </div>
+</div>
+
+<!-- Overlay for Modal -->
+<div id="overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 999;"></div>
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 CampJobs</p>
+            <div class="social-links">
+                <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook"></i></a>
+                <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
+    <script>
+        let currentApplicationId;
+        let currentStatus;
+    
+        // Fetch counts from the backend
+        function fetchCounts() {
+            const pendingCount = document.querySelectorAll("#pendingApplications tr").length;
+            const shortlistedCount = document.querySelectorAll("#shortlistedApplications tr").length;
+            const rejectedCount = document.querySelectorAll("#rejectedApplications tr").length;
+            const acceptedCount = document.querySelectorAll("#acceptedApplications tr").length;
+    
+            document.getElementById('pendingCount').textContent = pendingCount;
+            document.getElementById('shortlistedCount').textContent = shortlistedCount;
+            document.getElementById('rejectedCount').textContent = rejectedCount;
+            document.getElementById('acceptedCount').textContent = acceptedCount;
+    
+            document.getElementById('noPendingApplications').style.display = pendingCount === 0 ? 'block' : 'none';
+            document.getElementById('noShortlistedApplications').style.display = shortlistedCount === 0 ? 'block' : 'none';
+            document.getElementById('noRejectedApplications').style.display = rejectedCount === 0 ? 'block' : 'none';
+            document.getElementById('noAcceptedApplications').style.display = acceptedCount === 0 ? 'block' : 'none';
+        }
+    
+        // Populate table with applications
+        function populateTable(tableId, applications) {
+            const tableBody = document.getElementById(tableId);
+            tableBody.innerHTML = ''; // Clear existing rows
+    
+            applications.forEach((app, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${app.job.jobTitle}</td>
+                    <td><a href="javascript:void(0)" onclick="viewFile('${app.resumeImg}')">View</a></td>
+                    <td><a href="javascript:void(0)" onclick="viewFile('${app.letterImg}')">View</a></td>
+                    <td><a href="javascript:void(0)" onclick="viewFile('${app.certImg}')">View</a></td>
+                    <td><a href="javascript:void(0)" onclick="viewFile('${app.idImg}')">View</a></td>
+                    <td>${new Date(app.appliedAt).toLocaleString()}</td>
+                    <td>
+                        <select onchange="updateStatus(${app.appId}, this.value)">
+                            <option value="PENDING" ${app.appStatus === 'PENDING' ? 'selected' : ''}>Pending</option>
+                            <option value="SHORTLISTED" ${app.appStatus === 'SHORTLISTED' ? 'selected' : ''}>Shortlisted</option>
+                            <option value="REJECTED" ${app.appStatus === 'REJECTED' ? 'selected' : ''}>Rejected</option>
+                            <option value="ACCEPTED" ${app.appStatus === 'ACCEPTED' ? 'selected' : ''}>Accepted</option>
+                        </select>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+    
+            fetchCounts();
+        }
+    
+        // Function to view a file 
+        function viewFile(filename) {
+            const token = localStorage.getItem('token');
+    
+            if (!token) {
+                alert("You need to be logged in to view this file.");
+                return;
+            }
+    
+            const cleanedFilename = filename.replace(/^uploads\//, '').trim();
+            const encodedFilename = cleanedFilename.replace(/ /g, '%20'); // Replace spaces with %20
+            const url = `http://localhost:8081/api/application/download/${encodedFilename}`;
+    
+            fetch(url, {
+                method: 'GET',
+                mode: 'cors',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.blob();
+            })
+            .then(blob => {
+                const fileUrl = URL.createObjectURL(blob);
+                const fileType = blob.type;
+    
+                if (fileType.startsWith('image/')) {
+                    // Create modal container
+                    const modal = document.createElement('div');
+                    modal.id = 'imageModal';
+                    modal.style.position = 'fixed';
+                    modal.style.top = '0';
+                    modal.style.left = '0';
+                    modal.style.width = '100%';
+                    modal.style.height = '100%';
+                    modal.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+                    modal.style.display = 'flex';
+                    modal.style.justifyContent = 'center';
+                    modal.style.alignItems = 'center';
+                    modal.style.zIndex = '1000';
+    
+                    // Create close button
+                    const closeButton = document.createElement('span');
+                    closeButton.innerHTML = '&times;';
+                    closeButton.style.position = 'absolute';
+                    closeButton.style.top = '20px';
+                    closeButton.style.right = '30px';
+                    closeButton.style.fontSize = '30px';
+                    closeButton.style.color = 'white';
+                    closeButton.style.cursor = 'pointer';
+                    closeButton.onclick = () => document.body.removeChild(modal);
+    
+                    // Create image element
+                    const imgElement = document.createElement('img');
+                    imgElement.src = fileUrl;
+                    imgElement.style.maxWidth = '90%';
+                    imgElement.style.maxHeight = '90%';
+                    imgElement.style.borderRadius = '8px';
+    
+                    // Append elements
+                    modal.appendChild(closeButton);
+                    modal.appendChild(imgElement);
+                    document.body.appendChild(modal);
+                } else if (fileType === 'application/pdf') {
+                    window.open(fileUrl, '_blank');
+                } else {
+                    const link = document.createElement('a');
+                    link.href = fileUrl;
+                    link.download = cleanedFilename;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                }
+            })
+            .catch(error => {
+                console.error('Error viewing file:', error);
+                alert('Failed to load the file. Please try again.');
+            });
+        }
+    
+        // Fetch employer applications from the backend
+        async function fetchEmployerApplications() {
+            try {
+                const response = await fetch('http://localhost:8081/api/application/employer-applications', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    }
+                });
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                const applications = await response.json();
+    
+                // Populate tables based on application status
+                populateTable('pendingApplications', applications.filter(app => app.appStatus === 'PENDING'));
+                populateTable('shortlistedApplications', applications.filter(app => app.appStatus === 'SHORTLISTED'));
+                populateTable('rejectedApplications', applications.filter(app => app.appStatus === 'REJECTED'));
+                populateTable('acceptedApplications', applications.filter(app => app.appStatus === 'ACCEPTED'));
+            } catch (error) {
+                console.error('Error fetching applications:', error);
+            }
+        }
+    
+        // Fetch job seeker's email using the appId
+        async function fetchJobSeekerEmail(appId) {
+    try {
+        const response = await fetch(`http://localhost:8081/api/application/job-seeker-email/${appId}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token')
+            }
+        });
+
+        if (!response.ok) {
+            console.error('Failed to fetch job seeker email. Response status:', response.status);
+            throw new Error('Failed to fetch job seeker email.');
+        }
+
+        const email = await response.text(); // Parse the response as plain text
+        console.log('Job seeker email:', email); // Log the email
+        return email; // Return the email directly
+    } catch (error) {
+        console.error('Error fetching job seeker email:', error);
+        return null;
+    }
+}
+    
+        // Update application status
+        async function updateStatus(applicationId, newStatus) {
+            currentApplicationId = applicationId;
+            currentStatus = newStatus;
+    
+            const confirmSendEmail = confirm('Do you want to send an email to the job seeker about this status change?');
+    
+            if (confirmSendEmail) {
+                showEmailModal();
+            } else {
+                // Proceed with status update without sending email
+                await updateApplicationStatus(applicationId, newStatus, null); // Pass null for email content
+            }
+        }
+    
+        // Show email modal
+        function showEmailModal() {
+            document.getElementById('emailModal').style.display = 'block';
+            document.getElementById('overlay').style.display = 'block';
+        }
+    
+        // Close email modal
+        function closeEmailModal() {
+            document.getElementById('emailModal').style.display = 'none';
+            document.getElementById('overlay').style.display = 'none';
+        }
+    
+        // Send email
+       // Show loading spinner
+       function showLoadingSpinner() {
+            document.getElementById('loadingSpinner').style.display = 'flex';
+        }
+
+        // Hide loading spinner
+        function hideLoadingSpinner() {
+            document.getElementById('loadingSpinner').style.display = 'none';
+        }
+
+        // Send email
+        async function sendEmail() {
+            const emailContent = document.getElementById('emailContent').value;
+
+            if (!emailContent) {
+                alert('Please enter email content.');
+                return;
+            }
+
+            showLoadingSpinner(); // Show loading spinner
+
+            try {
+                // Fetch the job seeker's email using the appId
+                const jobSeekerEmail = await fetchJobSeekerEmail(currentApplicationId);
+
+                if (!jobSeekerEmail) {
+                    alert('Failed to fetch job seeker email. Please try again.');
+                    hideLoadingSpinner(); // Hide loading spinner
+                    return;
+                }
+
+                // Send email to the backend
+                const response = await fetch(`http://localhost:8081/email/status/send?to=${jobSeekerEmail}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    },
+                    body: JSON.stringify({
+                        subject: "Application Status Update", // Custom subject
+                        body: emailContent // Custom email body
+                    })
+                });
+
+                if (response.ok) {
+                    closeEmailModal();
+                    await updateApplicationStatus(currentApplicationId, currentStatus, emailContent); // Update status with email content
+                } else {
+                    const errorData = await response.json();
+                    alert(`Failed to send email: ${errorData.error || 'Unknown error'}`);
+                }
+            } catch (error) {
+                console.error('Error sending email:', error);
+                alert('Failed to send email. Please try again.');
+            } finally {
+                hideLoadingSpinner(); // Hide loading spinner
+            }
+        }
+
+
+    
+        // Update application status with email content
+        async function updateApplicationStatus(applicationId, newStatus, emailContent) {
+            try {
+                const response = await fetch(`http://localhost:8081/api/application/updateStatus/${applicationId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    },
+                    body: JSON.stringify({
+                        status: newStatus,
+                        emailBody: emailContent // Include email content in the request body
+                    })
+                });
+    
+                if (response.ok) {
+                    alert('Application status updated and email sent successfully.');
+                    fetchEmployerApplications(); // Refresh the table
+                } else {
+                    throw new Error('Failed to update application status.');
+                }
+            } catch (error) {
+                console.error('Error updating application status:', error);
+                alert('Failed to update application status. Please try again.');
+            }
+        }
+    
+        // Fetch data on page load
+        document.addEventListener("DOMContentLoaded", () => {
+            fetchCounts();
+            fetchEmployerApplications();
+        });
+    
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function() {
+            const query = this.value.toLowerCase();
+            const allTables = document.querySelectorAll('table tbody');
+    
+            allTables.forEach(table => {
+                table.querySelectorAll('tr').forEach(row => {
+                    row.style.display = row.textContent.toLowerCase().includes(query) ? '' : 'none';
+                });
+            });
+        });
+    
+        // Logout confirmation
+        function confirmLogout() {
+            if (confirm('Are you sure you want to log out?')) {
+                localStorage.removeItem('token');
+                window.location.href = '/html/shared/login.html';
+            }
+        }
+    </script>
+</body>
+</html>

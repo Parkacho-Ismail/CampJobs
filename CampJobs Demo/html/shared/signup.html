@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up | CampJobs</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .signup-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            width: 100%;
+            max-width: 400px;
+        }
+        .header{
+            margin: 0;
+            padding: 0%;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .required {
+            color: red;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: #007bff;
+            outline: none;
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+        }
+
+        .error {
+            color: red;
+            font-size: 0.9em;
+            position: absolute;
+            bottom: -20px;
+        }
+
+        .password-strength {
+            font-size: 0.9em;
+            color: #555;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #481EEF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .btn:hover {
+            background-color: #2e0498;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .footer a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="signup-container">
+        <div class="header" style="background-color: #161744;">
+            <h2 style="color: white;">Sign Up to <span style="color: orange;">Camp<span style="color: white;">Jobs</span></span></h2>
+        </div>
+        <form id="signupForm" onsubmit="return handleSubmit(event)">
+            <div class="form-group">
+                <label for="role">Role <span class="required">*</span></label>
+                <select id="role" name="role" required>
+                    <option value="">Select Role</option>
+                    <option value="jobSeeker">Job Seeker</option>
+                    <option value="employer">Employer</option>
+                </select>
+                <span class="error" id="roleError"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="username">Fullname<span class="required">*</span></label>
+                <input type="text" id="username" name="username" required>
+                <span class="error" id="usernameError"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password <span class="required">*</span></label>
+                <input type="password" id="password" name="password" required oninput="checkPasswordStrength()">
+                <span class="password-strength" id="passwordStrength"></span>
+                <span class="error" id="passwordError"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password <span class="required">*</span></label>
+                <input type="password" id="confirmPassword" name="confirmPassword" required>
+                <span class="error" id="confirmPasswordError"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email <span class="required">*</span></label>
+                <input type="email" id="email" name="email" required>
+                <span class="error" id="emailError"></span>
+            </div>
+
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" id="terms" name="terms" required><span>I agree to the <a href="termsofuse.html" target="_blank">Terms of Use</a> and <a href="privacypolicy.html" target="_blank">Privacy Policy</a>.</span>
+                </label>
+                <span class="error" id="termsError"></span>
+            </div>
+
+            <button type="submit" class="btn">Create Account</button>
+        </form>
+        <div class="footer">
+            Already a member? <a href="login.html">Log in</a>
+        </div>
+    </div>
+
+    <script>
+        function checkPasswordStrength() {
+    const password = document.getElementById("password").value;
+    const strengthText = document.getElementById("passwordStrength");
+    const strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
+
+    if (strongRegex.test(password)) {
+        strengthText.textContent = "Strong password";
+        strengthText.style.color = "green";
+    } else {
+        strengthText.textContent = "Weak password (must be at least 8 characters, include uppercase, lowercase, number, and special character)";
+        strengthText.style.color = "red";
+    }
+}
+async function registerUser(event) {
+    event.preventDefault();
+
+    const role = document.getElementById("role").value;
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value.trim();
+    const confirmPassword = document.getElementById("confirmPassword").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const terms = document.getElementById("terms").checked;
+
+    let isValid = true;
+
+    if (!role) {
+        document.getElementById("roleError").textContent = "Role is required.";
+        isValid = false;
+    } else {
+        document.getElementById("roleError").textContent = "";
+    }
+
+    if (!username) {
+        document.getElementById("usernameError").textContent = "Username is required.";
+        isValid = false;
+    } else {
+        document.getElementById("usernameError").textContent = "";
+    }
+
+    if (!password) {
+        document.getElementById("passwordError").textContent = "Password is required.";
+        isValid = false;
+    } else {
+        document.getElementById("passwordError").textContent = "";
+    }
+
+    if (password !== confirmPassword) {
+        document.getElementById("confirmPasswordError").textContent = "Passwords do not match.";
+        isValid = false;
+    } else {
+        document.getElementById("confirmPasswordError").textContent = "";
+    }
+
+    if (!email) {
+        document.getElementById("emailError").textContent = "Email is required.";
+        isValid = false;
+    } else {
+        document.getElementById("emailError").textContent = "";
+    }
+
+    if (!terms) {
+        document.getElementById("termsError").textContent = "You must agree to the terms.";
+        isValid = false;
+    } else {
+        document.getElementById("termsError").textContent = "";
+    }
+
+    if (!isValid) return;
+
+    // Register user
+    try {
+        const response = await fetch("http://localhost:8081/api/v1/camps-jobs/register", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                role: role.toUpperCase(),
+                fullName: username,
+                password: password,
+                email: email
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(await response.text());
+        }
+
+        const responseData = await response.json();
+        const userId = responseData.userId;
+        if (!userId) throw new Error("User ID is missing in the response.");
+
+        // Redirect based on role
+        const redirectUrl = role.toUpperCase() === "JOBSEEKER"
+            ? `/html/seeker/seekerdetails.html?userId=${userId}`
+            : `/html/emp/empdetails.html?userId=${userId}`;
+
+        setTimeout(() => window.location.href = redirectUrl, 1000);
+    } catch (error) {
+        console.error("Error during registration:", error);
+    }
+}
+
+document.getElementById("signupForm").addEventListener("submit", registerUser);
+
+    </script>
+</body>
+</html>
+                

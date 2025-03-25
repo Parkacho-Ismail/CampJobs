@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employers List</title>
+    <link rel="stylesheet" href="styles.css">
+    <script defer src="script.js"></script>
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background-color: #f2f2f2;
+    color: #333;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.header .btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.add-btn {
+    background-color: #1f2937;
+    color: #fff;
+}
+
+.add-btn:hover {
+    background-color: #374151;
+}
+
+#search-bar {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 30%;
+}
+
+.total-count {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+th {
+    background-color: #f9fafb;
+    font-weight: bold;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+button {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.edit-btn {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.edit-btn:hover {
+    background-color: #0056b3;
+}
+
+.delete-btn {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+.delete-btn:hover {
+    background-color: #a71d2a;
+}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <button class="btn add-btn" onclick="window.location.href='signup.html'">Add Employer</button>
+            <div class="total-count">Total: <span id="total-count">0</span></div>
+            <input type="text" id="search-bar" placeholder="Search here..." oninput="filterEmployers()">
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Contact</th>
+                    <th>Address</th>
+                    <th>Industry</th>
+                    <th>Website</th>
+                    <th>Email</th>
+                    <th>Joined</th>
+                    <th>Action</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="employers-list">
+                <!-- Dynamic content -->
+            </tbody>
+        </table>
+    </div>
+    <script>
+const employersList = document.getElementById('employers-list');
+const searchBar = document.getElementById('search-bar');
+const totalCount = document.getElementById('total-count');
+
+// Mock data; replace with database fetch
+const employers = [
+    { id: 1, name: 'John Doe', contact: '123456789', address: '123 Main St', industry: 'IT', website: 'johndoe.com', email: 'john@example.com', joined: '2023-01-01' },
+    { id: 2, name: 'Jane Smith', contact: '987654321', address: '456 Elm St', industry: 'Finance', website: 'janesmith.com', email: 'jane@example.com', joined: '2022-12-15' },
+];
+
+// Render the list of employers
+function renderEmployers() {
+    employersList.innerHTML = '';
+    employers.forEach((employer) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${employer.id}</td>
+            <td>${employer.name}</td>
+            <td>${employer.contact}</td>
+            <td>${employer.address}</td>
+            <td>${employer.industry}</td>
+            <td>${employer.website}</td>
+            <td>${employer.email}</td>
+            <td>${employer.joined}</td>
+            <td><button class="edit-btn" onclick="editEmployer(${employer.id})">Edit</button></td>
+            <td><button class="delete-btn" onclick="deleteEmployer(${employer.id})">Delete</button></td>
+        `;
+        employersList.appendChild(row);
+    });
+    totalCount.textContent = employers.length;
+}
+
+// Edit employer
+function editEmployer(id) {
+    window.location.href = `empeditdetails.html?employerId=${id}`;
+}
+
+// Delete employer
+function deleteEmployer(id) {
+    const confirmDelete = confirm(`Are you sure you want to delete employer with ID ${id}?`);
+    if (confirmDelete) {
+        const index = employers.findIndex((e) => e.id === id);
+        employers.splice(index, 1);
+
+        // Replace with actual API call
+        alert(`Employer with ID ${id} deleted`);
+        renderEmployers();
+    }
+}
+
+// Filter employers by search query
+function filterEmployers() {
+    const query = searchBar.value.toLowerCase();
+    const rows = document.querySelectorAll('#employers-list tr');
+    rows.forEach((row) => {
+        const rowText = row.innerText.toLowerCase();
+        row.style.display = rowText.includes(query) ? '' : 'none';
+    });
+}
+
+// Initialize the page
+renderEmployers();
+
+    </script>
+</body>
+</html>

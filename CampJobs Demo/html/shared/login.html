@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - CampJobs</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 15px;
+            background-color: #161744;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .header h1 {
+            margin: 0;
+            color: white;
+        }
+
+        .header span {
+            color: #f90;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        select, input {
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #0066ff;
+            box-shadow: 0 0 5px rgba(0, 102, 255, 0.5);
+        }
+
+        .btn {
+            background-color: #0066ff;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #004db3;
+        }
+
+        .links {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .links a {
+            color: #0066ff;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+
+        .links a:hover {
+            text-decoration: underline;
+        }
+
+        .error {
+            color: red;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .close {
+            color: red;
+            float: right;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: darkred;
+        }
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #0066ff;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Sign in to <span>Camp</span>Jobs</h1>
+        </div>
+        
+        <form id="loginForm">
+            <label for="role">Role</label>
+            <select id="role" required>
+                <option value="" disabled selected>SELECT ROLE</option>
+                <option value="Job seeker">JOBSEEKER</option>
+                <option value="Employer">EMPLOYER</option>
+                <option value="Admin">ADMIN</option>
+            </select>
+            <div id="roleError" class="error"></div>
+
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="Email" required>
+            <div id="emailError" class="error"></div>
+
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Password" required>
+            <div id="passwordError" class="error"></div>
+
+            <button type="submit" class="btn" id="loginButton">Sign in</button>
+        </form>
+        <div class="links">
+            <p>No account? <a href="signup.html">Create one</a></p>
+            <p><a href="#" id="forgotPassword">Forgot password?</a></p>
+        </div>
+    </div>
+
+    <!-- Step 1: Email Input Modal -->
+    <div id="emailModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Reset Password</h2>
+            <p>Enter your registered email to receive a reset token.</p>
+            <input type="email" id="resetEmail" placeholder="Enter your email" required>
+            <button class="btn" id="sendResetToken">Send Token</button>
+            <div id="emailErrorMessage" class="error"></div>
+            <div id="loadingSpinner1" class="loader" style="display: none;"></div>
+        </div>
+    </div>
+
+    <!-- Step 2: Token Input Modal -->
+    <div id="tokenModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Reset Password</h2>
+            <p>Enter the token sent to your email.</p>
+            <input type="text" id="resetToken" placeholder="Enter your token" required>
+            <button class="btn" id="submitToken">Submit Token</button>
+            <div id="tokenErrorMessage" class="error"></div>
+            <div id="loadingSpinner2" class="loader" style="display: none;"></div>
+        </div>
+    </div>
+
+    <!-- Step 3: New Password Modal -->
+    <div id="newPasswordModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Set New Password</h2>
+            <p>Enter and confirm your new password.</p>
+            <input type="password" id="newPassword" placeholder="New Password" required>
+            <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+            <button class="btn" id="submitNewPassword">Submit</button>
+            <div id="passwordErrorMessage" class="error"></div>
+            <div id="loadingSpinner3" class="loader" style="display: none;"></div>
+        </div>
+    </div>
+
+    <script>
+        // Login Form Submission
+        document.getElementById('loginForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            // Clear previous errors
+            clearErrors();
+
+            // Get and format inputs
+            const role = document.getElementById('role').value.trim().toUpperCase().replace(/\s+/g, '');
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+
+            // Validate inputs
+            if (!role || !email || !password) {
+                if (!role) document.getElementById('roleError').textContent = 'Role is required.';
+                if (!email) document.getElementById('emailError').textContent = 'Email is required.';
+                if (!password) document.getElementById('passwordError').textContent = 'Password is required.';
+                return;
+            }
+
+            // Disable login button and show loading state
+            const loginButton = document.getElementById('loginButton');
+            loginButton.disabled = true;
+            loginButton.textContent = 'Signing in...';
+
+            try {
+                const response = await fetch('http://localhost:8081/api/v1/camps-jobs/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password, role })
+                });
+
+                const data = await response.json();
+                console.log("API Response:", data);
+
+                if (data.status === "00" && data.data) {
+                    // Store user data in localStorage
+                    localStorage.setItem('token', data.data.token);
+                    localStorage.setItem('role', data.data.role);
+                    localStorage.setItem('email', data.data.email);
+                    localStorage.setItem('userId', data.data.userId);
+
+                    // Redirect based on role
+                    switch (data.data.role) {
+                        case 'JOBSEEKER':
+                            window.location.href = '/html/seeker/seekerhomepage.html';
+                            break;
+                        case 'EMPLOYER':
+                            window.location.href = '/html/emp/emphomepage.html';
+                            break;
+                        case 'ADMIN':
+                            window.location.href = '/html/admin/adminhomepage.html';
+                            break;
+                        default:
+                            alert("Unknown role. Contact support.");
+                    }
+                } else {
+                    document.getElementById('emailError').textContent = data.message || "Login failed. Please try again.";
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                document.getElementById('emailError').textContent = "Error connecting to the server.";
+            } finally {
+                // Re-enable login button
+                loginButton.disabled = false;
+                loginButton.textContent = 'Sign in';
+            }
+        });
+
+        // Forgot Password Modal Functionality
+        document.getElementById('forgotPassword').addEventListener('click', function () {
+            document.getElementById('emailModal').style.display = 'flex';
+        });
+
+        // Close modals when "X" is clicked
+        document.querySelectorAll('.close').forEach(closeButton => {
+            closeButton.addEventListener('click', function () {
+                document.getElementById('emailModal').style.display = 'none';
+                document.getElementById('tokenModal').style.display = 'none';
+                document.getElementById('newPasswordModal').style.display = 'none';
+            });
+        });
+
+        // Close modals when clicking outside of them
+        window.onclick = function (event) {
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        };
+
+        // Step 1: Send Token to Email
+        document.getElementById('sendResetToken').addEventListener('click', async function () {
+            const email = document.getElementById('resetEmail').value.trim();
+            const errorMessage = document.getElementById('emailErrorMessage');
+            const loadingSpinner = document.getElementById('loadingSpinner1');
+
+            if (!validateEmail(email)) {
+                errorMessage.textContent = "Please enter a valid email address!";
+                return;
+            }
+
+            errorMessage.textContent = "";
+            loadingSpinner.style.display = 'block';
+
+            try {
+                const response = await fetch('http://localhost:8081/api/v1/camps-jobs/forgot-password', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alert(data.message || "A password reset token has been sent to your email.");
+                    document.getElementById('emailModal').style.display = 'none';
+                    document.getElementById('tokenModal').style.display = 'flex'; // Show token input modal
+                } else {
+                    errorMessage.textContent = data.message || "Error: Unable to send the token.";
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                errorMessage.textContent = "Error sending token. Check your internet connection.";
+            } finally {
+                loadingSpinner.style.display = 'none';
+            }
+        });
+
+// Step 2: Validate Token
+document.getElementById('submitToken').addEventListener('click', async function () {
+    const token = document.getElementById('resetToken').value.trim();
+    const errorMessage = document.getElementById('tokenErrorMessage');
+    const loadingSpinner = document.getElementById('loadingSpinner2');
+
+    if (!token) {
+        errorMessage.textContent = "Please enter a valid token!";
+        return;
+    }
+
+    errorMessage.textContent = "";
+    loadingSpinner.style.display = 'block';
+
+    try {
+        const response = await fetch('http://localhost:8081/api/v1/camps-jobs/validate-token', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token })
+        });
+
+        // Handle non-JSON responses
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json(); // Parse JSON response
+
+        if (data.message === "Token is valid.") {
+            // Token is valid, show the new password modal
+            document.getElementById('tokenModal').style.display = 'none';
+            document.getElementById('newPasswordModal').style.display = 'flex';
+        } else {
+            errorMessage.textContent = data.message || "Invalid or expired token.";
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        errorMessage.textContent = "Error validating token. Check your internet connection.";
+    } finally {
+        loadingSpinner.style.display = 'none';
+    }
+});
+
+ // Step 3: Submit New Password
+document.getElementById('submitNewPassword').addEventListener('click', async function () {
+    const newPassword = document.getElementById('newPassword').value.trim();
+    const confirmPassword = document.getElementById('confirmPassword').value.trim();
+    const errorMessage = document.getElementById('passwordErrorMessage');
+    const loadingSpinner = document.getElementById('loadingSpinner3');
+
+    if (!newPassword || newPassword.length < 6) {
+        errorMessage.textContent = "Password must be at least 6 characters long.";
+        return;
+    }
+
+    if (newPassword !== confirmPassword) {
+        errorMessage.textContent = "Passwords do not match.";
+        return;
+    }
+
+    errorMessage.textContent = "";
+    loadingSpinner.style.display = 'block';
+
+    try {
+        const token = document.getElementById('resetToken').value.trim();
+        const response = await fetch('http://localhost:8081/api/v1/camps-jobs/reset-password', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token, newPassword })
+        });
+
+        let data;
+        const contentType = response.headers.get('content-type');
+        if (contentType && contentType.includes('application/json')) {
+            data = await response.json();
+        } else {
+            data = { message: await response.text() };
+        }
+
+        if (response.ok) {
+            alert(data.message || "Your password has been reset successfully. You can now log in.");
+            window.location.href = "/html/shared/login.html"; // Redirect user to login page
+        } else {
+            errorMessage.textContent = data.message || "Error: Unable to reset your password.";
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        errorMessage.textContent = "Error resetting password. Check your internet connection.";
+    } finally {
+        loadingSpinner.style.display = 'none';
+    }
+});
+
+        // Helper Functions
+        function clearErrors() {
+            document.getElementById('roleError').textContent = '';
+            document.getElementById('emailError').textContent = '';
+            document.getElementById('passwordError').textContent = '';
+        }
+
+        function validateEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+    </script>
+</body>
+</html>

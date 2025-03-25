@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - CampJobs</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            background-color: #f5f5f5;
+            padding-top: 70px; /* Space for fixed header */
+            padding-bottom: 60px; /* Space for fixed footer */
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: center; /* Changed from space-between to center */
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #161744;
+            color: white;
+            height: 50px;
+            position: relative;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 24px;
+            position: absolute; /* Position logo absolutely */
+            left: 20px; /* Position from left */
+        }
+
+        .logo span {
+            color: orange;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 15px;
+            margin: 0 auto; /* Center the nav links */
+            padding: 0;
+        }
+
+        .nav-links li {
+            display: flex;
+        }
+
+        .nav-links a {
+            display: block;
+            position: relative;
+            padding: 10px 15px;
+            text-decoration: none;
+            color: white;
+            font-size: 1rem;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .nav-links li:not(:last-child)::after {
+            content: "";
+            position: absolute;
+            right: 0;
+            top: 50%;
+            height: 60%;
+            width: 2px;
+            background-color: white;
+            transform: translateY(-50%);
+        }
+
+        .nav-links a:hover {
+            transform: scale(1.1);
+            text-decoration: underline;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Contact Section Styles */
+        .contact-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .contact-title {
+            color: #161744;
+            margin-bottom: 30px;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .contact-card {
+            flex: 1 1 200px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .contact-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .contact-icon {
+            font-size: 2rem;
+            color: #161744;
+            margin-bottom: 10px;
+        }
+
+        .contact-card h3 {
+            margin: 10px 0;
+            color: #161744;
+        }
+
+        .contact-card a {
+            color: orange;
+            text-decoration: none;
+        }
+
+        .contact-card a:hover {
+            text-decoration: underline;
+        }
+
+        /* Footer Styles */
+        footer {
+            background-color: #161744;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .footer-content p {
+            margin: 0;
+        }
+
+        .social-links a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 1.2rem;
+        }
+
+        .social-links a:hover {
+            color: orange;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="nav-container">
+            <h1 class="logo">Camp<span>Jobs</span></h1>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="landingaboutus.html">About us</a></li>
+                        <li><a href="landingpage.html">Jobs</a></li>
+                        <li><a href="landingcontact.html">Contact</a></li>
+                </ul>
+            </nav>
+        </div>   
+    </header>
+
+    <main>
+        <div class="contact-container">
+            <h1 class="contact-title">Contact CampJobs</h1>
+            <p>Reach out to us for inquiries, partnerships or support. We're here to help!</p>
+            
+            <div class="contact-info">
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fas fa-phone-alt"></i>
+                    </div>
+                    <h3>Phone</h3>
+                    <p><a href="tel:+25498102317">+254 (798) 102-317</a></p>
+                    <p><a href="tel:+9876543210">+9 (876) 543-210</a></p>
+                </div>
+                
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <h3>Email</h3>
+                    <p><a href="campjobsinfo@gmail.com">campjobsinfo@gmail.com</a></p>
+                    <p><a href="mailto:support@campjobs.org">support@campjobs.org</a></p>
+                </div>
+                
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <h3>Address</h3>
+                    <p>123 Kakuma Tarach Ave</p>
+                    <p>Kakuma Town, KT 10001</p>
+                </div>
+            </div>
+            
+            <div class="contact-info">
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fab fa-facebook"></i>
+                    </div>
+                    <h3>Facebook</h3>
+                    <p><a href="https://facebook.com/campjobs" target="_blank">facebook.com/campjobs</a></p>
+                </div>
+                
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fab fa-instagram"></i>
+                    </div>
+                    <h3>Instagram</h3>
+                    <p><a href="https://instagram.com/campjobs" target="_blank">@campjobs</a></p>
+                </div>
+                
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <i class="fab fa-linkedin"></i>
+                    </div>
+                    <h3>LinkedIn</h3>
+                    <p><a href="https://linkedin.com/company/campjobs" target="_blank">linkedin.com/campjobs</a></p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 CampJobs. All rights reserved.</p>
+            <div class="social-links">
+                <a href="https://facebook.com/campjobs" target="_blank"><i class="fab fa-facebook"></i></a>
+                <a href="https://instagram.com/campjobs" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="https://linkedin.com/company/campjobs" target="_blank"><i class="fab fa-linkedin"></i></a>
+                <a href="https://twitter.com/campjobs" target="_blank"><i class="fab fa-twitter"></i></a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,283 @@
+
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    .nav-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px;
+        background-color: #161744;
+        color: white;
+        height: 50px;
+        position: relative;
+    z-index: 1000; /* Ensures it stays on top */
+    }
+
+    .logo {
+        font-size: 24px;
+    }
+
+    .logo span {
+        color: orange;
+    }
+
+    .nav-links {
+        list-style: none;
+        display: flex;
+        gap: 15px;
+    }
+
+    .nav-links li {
+        display: flex;
+    }
+
+    .nav-links a {
+        display: block;
+        position: relative;
+        padding: 10px 15px;
+        text-decoration: none;
+        color: white;
+        font-size: 1rem;
+        transition: transform 0.3s ease, background-color 0.3s ease;
+        pointer-events: auto; /* Ensure links are clickable */
+    }
+
+    .nav-links li:not(:last-child)::after {
+        content: "";
+        position: absolute;
+        right: 0;
+        top: 50%;
+        height: 60%;
+        width: 2px;
+        background-color: white;
+        transform: translateY(-50%);
+    }
+
+    .nav-links a:hover {
+        transform: scale(1.2);
+        text-decoration: underline;
+        cursor: pointer;
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+    .auth-buttons button {
+        background: linear-gradient(135deg, #ff8c00, #ffbb33); 
+        color: black;
+        padding: 12px 24px;
+        font-size: 16px;
+        font-weight: bold;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease-in-out;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .auth-buttons button:hover {
+        transform: scale(1.05);
+        background-color: orange;
+    } 
+    .user-info {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: white;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+        padding: 5px 0;
+        z-index: 1;
+    }
+
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+
+    .image-section {
+        width: 100%;
+        height: 50vh;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .image-section img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .text-overlay {
+        position: absolute;
+        margin-top: -17%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        padding: 10px;
+        border-radius: 10px;
+        text-decoration: solid;
+    }
+
+    .text-overlay h1 {
+        font-size: 2rem;
+        margin: 0;
+    }
+
+    .search {
+        text-align: center;
+        background-color: #f1f1f1;
+        padding: 10px;
+
+        background-image: radial-gradient(circle at 30% 94%, rgba(245, 245, 245,0.06) 0%, rgba(245, 245, 245,0.06) 50%,rgba(21, 21, 21,0.06) 50%, rgba(21, 21, 21,0.06) 100%),radial-gradient(circle at 59% 19%, rgba(248, 248, 248,0.06) 0%, rgba(248, 248, 248,0.06) 50%,rgba(87, 87, 87,0.06) 50%, rgba(87, 87, 87,0.06) 100%),radial-gradient(circle at 7% 11%, rgba(148, 148, 148,0.06) 0%, rgba(148, 148, 148,0.06) 50%,rgba(254, 254, 254,0.06) 50%, rgba(254, 254, 254,0.06) 100%),linear-gradient(90deg, rgb(189, 189, 189),rgb(205, 205, 205));
+    }
+
+    .search form {
+        display: flex;
+        justify-content: center;
+        gap: 100px;
+        flex-wrap: wrap;
+    }
+
+    .search input {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        width: 200px;
+        font-size: larger;
+    }
+
+    .job-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 20px;
+        margin: 20px;
+    }
+
+    .card {
+        border: 1px solid #ddd;
+        padding: 20px;
+        border-radius: 8px;
+        text-align: center;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+    .card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .job-details {
+        display: none;
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 500px;
+        height: 100%;
+        background-color: white;
+        box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        overflow-y: auto;
+    }
+
+    .job-details.active {
+        display: block;
+    }
+
+    .job-details .close-btn {
+        cursor: pointer;
+        text-align: right;
+        font-size: 20px;
+    }
+
+    .job-details .close-btn:hover {
+        color: orange;
+        cursor: pointer;
+    }
+
+    .view-details {
+        background: linear-gradient(135deg, #ff8c00, #ffbb33); /* Orange to Light Orange */
+        color: black;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease-in-out;
+  position: relative;
+  overflow: hidden;
+    }
+
+    .apply-btn {
+  background: linear-gradient(135deg, #ff8c00, #ffbb33); /* Orange to Light Orange */
+  color: black;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease-in-out;
+  position: relative;
+  overflow: hidden;
+  width: 70%; /* Button covers 70% of the container */
+  display: block; /* Makes it behave like a block element */
+  margin: 20px auto; /* Centers it horizontally */
+  text-align: center;
+}
+
+
+    .view-details:hover {
+        transform: scale(1.05);
+        background-color: orange;
+    }
+
+    .apply-btn:hover {
+        transform: scale(1.05);
+        background-color: orange;
+    }
+
+    footer {
+        background-color: #161744;
+        color: white;
+        text-align: center;
+        padding: 10px;
+        margin-top: 20px;
+    }
+
+    .footer-content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .footer-content p {
+        margin: 0;
+    }
+
+    .social-links a {
+        color: white;
+        text-decoration: none;
+        margin: 0 10px;
+    }
+
+    .social-links a:hover {
+        color: orange;
+    }

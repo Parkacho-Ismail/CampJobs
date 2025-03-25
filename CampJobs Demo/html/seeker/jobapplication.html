@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Application</title>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .application-form {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 400px;
+            padding: 20px;
+            text-align: center;
+        }
+        .application-form h2 {
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .form-group label {
+            font-weight: bold;
+        }
+        .form-group .required {
+            color: red;
+            margin-left: 5px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-top: 5px;
+        }
+        .upload-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f9f9f9;
+            border: 1px dashed #ccc;
+            padding: 20px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+        }
+        .upload-btn:hover {
+            background-color: #f1f1f1;
+        }
+        .upload-btn i {
+            font-size: 2rem;
+            margin-right: 10px;
+            color: #ff6347;
+        }
+        .uploaded-file {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: green;
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            font-size: 1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+        .submit-btn:hover {
+            background-color: #0056b3;
+        }
+        .submit-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        .spinner {
+            display: none;
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 2px solid white;
+            width: 16px;
+            height: 16px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: translateY(-50%) rotate(0deg); }
+            100% { transform: translateY(-50%) rotate(360deg); }
+        }
+        .error-message {
+            color: red;
+            font-size: 0.8rem;
+            margin-top: 5px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="application-form">
+        <h2 style="margin-top: -5px;">Upload the required documents</h2>
+        <form id="applicationForm">
+            <div class="form-group">
+                <label for="resumeImg">Click to upload resume<span class="required">*</span></label>
+                <div class="upload-btn" onclick="document.getElementById('resumeImg').click()">
+                    <i class="fas fa-upload"></i> Upload Resume
+                </div>
+                <input type="file" id="resumeImg" name="resumeImg" style="display: none;" required 
+                       onchange="validateFile('resumeImg')" accept="application/pdf,.pdf">
+                <div id="resumeImg-uploaded" class="uploaded-file"></div>
+                <div id="resumeImg-error" class="error-message"></div>
+            </div>
+    
+            <div class="form-group">
+                <label for="letterImg">Click to upload cover letter<span class="required">*</span></label>
+                <div class="upload-btn" onclick="document.getElementById('letterImg').click()">
+                    <i class="fas fa-upload"></i> Upload Cover Letter
+                </div>
+                <input type="file" id="letterImg" name="letterImg" style="display: none;" required 
+                       onchange="validateFile('letterImg')" accept="application/pdf,.pdf">
+                <div id="letterImg-uploaded" class="uploaded-file"></div>
+                <div id="letterImg-error" class="error-message"></div>
+            </div>
+    
+            <div class="form-group">
+                <label for="certImg">Click to upload certificate<span class="required">*</span></label>
+                <div class="upload-btn" onclick="document.getElementById('certImg').click()">
+                    <i class="fas fa-upload"></i> Upload Certificate
+                </div>
+                <input type="file" id="certImg" name="certImg" style="display: none;" required 
+                       onchange="validateFile('certImg')" accept="application/pdf,.pdf">
+                <div id="certImg-uploaded" class="uploaded-file"></div>
+                <div id="certImg-error" class="error-message"></div>
+            </div>
+    
+            <div class="form-group">
+                <label for="idImg">Click to upload ID<span class="required">*</span></label>
+                <div class="upload-btn" onclick="document.getElementById('idImg').click()">
+                    <i class="fas fa-upload"></i> Upload ID
+                </div>
+                <input type="file" id="idImg" name="idImg" style="display: none;" required 
+                       onchange="validateFile('idImg')" accept="application/pdf,.pdf">
+                <div id="idImg-uploaded" class="uploaded-file"></div>
+                <div id="idImg-error" class="error-message"></div>
+            </div>
+    
+            <button type="button" class="submit-btn" id="submitBtn" onclick="submitApplication()">
+                Submit
+                <span class="spinner" id="submitSpinner"></span>
+            </button>
+        </form>
+    </div>    
+
+    <script>
+        // Strict PDF validation
+        function validateFile(inputId) {
+            const input = document.getElementById(inputId);
+            const uploadedDiv = document.getElementById(`${inputId}-uploaded`);
+            const errorDiv = document.getElementById(`${inputId}-error`);
+            
+            // Clear previous messages
+            uploadedDiv.textContent = '';
+            errorDiv.style.display = 'none';
+            
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                const fileName = file.name.toLowerCase();
+                const isPDF = fileName.endsWith('.pdf') && file.type === 'application/pdf';
+                
+                if (!isPDF) {
+                    errorDiv.textContent = "Only PDF files are allowed (.pdf extension required)";
+                    errorDiv.style.display = "block";
+                    input.value = ''; // Clear the invalid file
+                    return false;
+                }
+                
+                // Valid PDF file
+                uploadedDiv.textContent = `Uploaded: ${file.name}`;
+                return true;
+            }
+            return false;
+        }
+
+        async function submitApplication() {
+            // Set loading state
+            const submitBtn = document.getElementById('submitBtn');
+            const spinner = document.getElementById('submitSpinner');
+            submitBtn.disabled = true;
+            spinner.style.display = "block";
+            submitBtn.textContent = "Submitting...";
+            
+            // Validate all files first
+            const fileInputs = ['resumeImg', 'letterImg', 'certImg', 'idImg'];
+            let allValid = true;
+            
+            for (const inputId of fileInputs) {
+                const input = document.getElementById(inputId);
+                const errorDiv = document.getElementById(`${inputId}-error`);
+                
+                if (!input.files || !input.files[0]) {
+                    errorDiv.textContent = "This file is required";
+                    errorDiv.style.display = "block";
+                    allValid = false;
+                } else if (!validateFile(inputId)) {
+                    allValid = false;
+                }
+            }
+            
+            if (!allValid) {
+                submitBtn.disabled = false;
+                spinner.style.display = "none";
+                submitBtn.textContent = "Submit";
+                return;
+            }
+
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    alert("You are not logged in. Please log in first.");
+                    window.location.href = "/html/shared/login.html";
+                    return;
+                }
+
+                const urlParams = new URLSearchParams(window.location.search);
+                const jobId = urlParams.get('jobId');
+                const userId = urlParams.get('userId');
+
+                if (!jobId || !userId) {
+                    alert("Missing job or user information. Please try again.");
+                    return;
+                }
+
+                // Prepare FormData
+                const formData = new FormData();
+                for (const inputId of fileInputs) {
+                    formData.append(inputId, document.getElementById(inputId).files[0]);
+                }
+
+                // Submit application
+                const response = await fetch(`http://localhost:8081/api/application/apply/${jobId}/${userId}`, {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    // Handle duplicate application error (status 400)
+                    if (response.status === 400) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.message || "You have already applied for this job");
+                    }
+                    throw new Error(`Failed to apply: ${response.status}`);
+                }
+
+                const result = await response.json();
+                alert(result.message || "Application submitted successfully!");
+                window.location.href = "/html/seeker/seekerhomepage.html";
+
+            } catch (error) {
+                console.error("Submission error:", error);
+                alert(error.message || "Failed to submit application. Please try again.");
+            } finally {
+                // Reset button state
+                submitBtn.disabled = false;
+                spinner.style.display = "none";
+                submitBtn.textContent = "Submit";
+            }
+        }
+    </script>
+</body>
+</html>

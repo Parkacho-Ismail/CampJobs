@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Seekers List</title>
+    <style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background-color: #f2f2f2;
+    color: #333;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.header .btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.add-btn {
+    background-color: #1f2937;
+    color: #fff;
+}
+
+.add-btn:hover {
+    background-color: #374151;
+}
+
+#search-bar {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 30%;
+}
+
+.total-count {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+th {
+    background-color: #f9fafb;
+    font-weight: bold;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+button {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.edit-btn {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.edit-btn:hover {
+    background-color: #0056b3;
+}
+
+.delete-btn {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+.delete-btn:hover {
+    background-color: #a71d2a;
+}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <button class="btn add-btn" onclick="window.location.href='signup.html'">Add Job Seeker</button>
+            <div class="total-count">Total: <span id="total-count">0</span></div>
+            <input type="text" id="search-bar" placeholder="Search here..." oninput="filterJobSeekers()">
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Gender</th>
+                    <th>Nationality</th>
+                    <th>Tel</th>
+                    <th>DOB</th>
+                    <th>Action</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="jobseekers-list">
+                <!-- Dynamic content -->
+            </tbody>
+        </table>
+    </div>
+</body>
+
+    <script>
+const jobseekersList = document.getElementById('jobseekers-list');
+const searchBar = document.getElementById('search-bar');
+const totalCount = document.getElementById('total-count');
+
+// Retrieve token from localStorage
+const token = localStorage.getItem('token');
+
+if (!token) {
+    alert("You must be logged in to access this page.");
+    window.location.href = "/html/shared/login.html"; // Redirect to login page
+}
+
+// Fetch job seekers from API with token
+
+async function fetchJobSeekers() {
+    try {
+        const token = localStorage.getItem('token'); // Get JWT token from storage
+        const response = await fetch('http://localhost:8081/api/job-seeker/get-all-seekers', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            console.error("Failed to fetch job seekers. Status:", response.status);
+            throw new Error("Error fetching job seekers");
+        }
+
+        const jobSeekers = await response.json();
+        console.log("Full API Response:", jobSeekers);  // Debugging line
+
+        const jobSeekersArray = jobSeekers.data || jobSeekers; // Extract array properly
+        console.log("Extracted Job Seekers:", jobSeekersArray); 
+
+        renderJobSeekers(jobSeekersArray);
+    } catch (error) {
+        console.error("Error fetching job seekers:", error);
+    }
+}
+
+
+// async function fetchJobSeekers() {
+//     try {
+//         const response = await fetch('http://localhost:8081/api/job-seeker/all-job-seekers', {
+//             method: 'GET',
+//             headers: {
+//                 'Authorization': `Bearer ${token}`,
+//                 'Content-Type': 'application/json'
+//             }
+//         });
+
+//         if (!response.ok) {
+//             if (response.status === 401) {
+//                 alert("Session expired. Please log in again.");
+//                 logout(); // Clear token and redirect to login
+//             }
+//             throw new Error("Failed to fetch job seekers");
+//         }
+
+//         const responseData = await response.json();  // Parse response JSON
+//         console.log("Full API Response:", responseData); // Log full response
+
+//         // const jobSeekersArray = responseData.data || []; // Extract job seekers array
+//         // console.log("Extracted Job Seekers:", jobSeekersArray); // Debugging log
+
+//         const jobSeekersArray = Array.isArray(users) ? users : users.data || []; 
+//         console.log("Extracted Job Seekers:", jobSeekersArray);  // Log the extracted data
+
+
+//         renderJobSeekers(jobSeekersArray);
+//     } catch (error) {
+//         console.error("Error fetching job seekers:", error);
+//     }
+// }
+
+// // Render the list of job seekers
+
+// function renderJobSeekers(jobSeekers) {
+//     console.log("Rendering Job Seekers:", jobSeekers);  // Debugging line
+//     if (Array.isArray(jobSeekers) && jobSeekers.length > 0) {
+//         jobseekersList.innerHTML = ''; // Clear existing rows
+
+//         if (!Array.isArray(jobSeekers) || jobSeekers.length === 0) {
+//         jobseekersList.innerHTML = `<tr><td colspan="9">No job seekers found.</td></tr>`;
+//         return;
+//     }
+//         jobSeekers.forEach((seeker) => {
+//             console.log("Seeker:", seeker); // Log each seeker before adding to the table
+//             const row = document.createElement('tr');
+//             row.innerHTML = `
+//                 <td>${seeker.seekerId}</td>
+//                 <td>${seeker.firstName}</td>
+//                 <td>${seeker.lastName}</td>
+//                 <td>${seeker.seekerGender}</td>
+//                 <td>${seeker.seekerNat}</td>
+//                 <td>${seeker.seekerTel}</td>
+//                 <td>${seeker.seekerDob}</td>
+//                 <td><button class="edit-btn" onclick="editJobSeeker(${seeker.seekerId})">Edit</button></td>
+//                 <td><button class="delete-btn" onclick="deleteJobSeeker(${seeker.seekerId})">Delete</button></td>
+//             `;
+//             jobseekersList.appendChild(row);
+//         });
+//     } else {
+//         jobseekersList.innerHTML = `<tr><td colspan="9">No job seekers found.</td></tr>`;
+//     }
+
+//     totalCount.textContent = jobSeekers.length || 0;
+// }
+
+
+
+
+// function renderJobSeekers(jobSeekers) {
+//     console.log("Rendering Job Seekers:", jobSeekers); // Debugging output
+
+//     jobseekersList.innerHTML = ''; // Clear existing rows
+
+//     if (!Array.isArray(jobSeekers) || jobSeekers.length === 0) {
+//         jobseekersList.innerHTML = `<tr><td colspan="9">No job seekers found.</td></tr>`;
+//         return;
+//     }
+
+//     jobSeekers.forEach((seeker) => {
+//         const row = document.createElement('tr');
+//         row.innerHTML = `
+//             <td>${seeker.seekerId}</td>
+//             <td>${seeker.firstName}</td>
+//             <td>${seeker.lastName}</td>
+//             <td>${seeker.seekerGender}</td>
+//             <td>${seeker.seekerNat}</td>
+//             <td>${seeker.seekerTel}</td>
+//             <td>${seeker.seekerDob}</td>
+//             <td><button class="edit-btn" onclick="editJobSeeker(${seeker.seekerId})">Edit</button></td>
+//             <td><button class="delete-btn" onclick="deleteJobSeeker(${seeker.seekerId})">Delete</button></td>
+//         `;
+//         jobseekersList.appendChild(row);
+//     });
+
+//     totalCount.textContent = jobSeekers.length;
+// }
+// function renderJobSeekers(jobSeekers) {
+//     if (Array.isArray(jobSeekers)) {
+//         jobseekersList.innerHTML = ''; // Clear existing rows
+//         jobSeekers.forEach((seeker) => {
+//             const row = document.createElement('tr');
+//             row.innerHTML = `
+//                 <td>${seeker.seekerId}</td>
+//                 <td>${seeker.firstName}</td>
+//                 <td>${seeker.lastName}</td>
+//                 <td>${seeker.seekerDob}</td>
+//                 <td>${seeker.seekerGender}</td>
+//                 <td>${seeker.seekerNat}</td>
+//                 <td>${seeker.seekerTel}</td>
+//                 <td><button class="edit-btn" onclick="editJobSeeker(${seeker.seekerId})">Edit</button></td>
+//                 <td><button class="delete-btn" onclick="deleteJobSeeker(${seeker.seekerId})">Delete</button></td>
+//             `;
+//             jobseekersList.appendChild(row);
+//         });
+//     } else {
+//         jobseekersList.innerHTML = `<tr><td colspan="9">No job seekers found.</td></tr>`;
+//     }
+//     totalCount.textContent = jobSeekers.length;
+// }
+
+
+
+// function renderJobSeekers(jobSeekers) {
+//     if (Array.isArray(jobSeekers)) {
+//         jobseekersList.innerHTML = ''; // Clear existing rows
+//         jobSeekers.forEach((seeker) => {
+//             const row = document.createElement('tr');
+//             row.innerHTML = `
+//                 <td>${seeker.seeker_id}</td>
+//                 <td>${seeker.first_name} ${seeker.last_name}</td>
+//                 <td>${seeker.seeker_dob}</td>
+//                 <td>${seeker.seeker_gender}</td>
+//                 <td>${seeker.seeker_nat}</td>
+//                 <td>${seeker.seeker_tel}</td>
+//                 <td><button class="edit-btn" onclick="editJobSeeker(${seeker.seeker_id})">Edit</button></td>
+//                 <td><button class="delete-btn" onclick="deleteJobSeeker(${seeker.seeker_id})">Delete</button></td>
+//             `;
+//             jobseekersList.appendChild(row);
+//         });
+//     } else {
+//         jobseekersList.innerHTML = `<tr><td colspan="9">No job seekers found.</td></tr>`;
+//     }
+//     totalCount.textContent = jobSeekers.length;
+// }
+
+// Edit job seeker
+function editJobSeeker(id) {
+    window.location.href = `seekereditdetails.html?seekerId=${id}`;
+}
+
+// Delete job seeker with token authentication
+async function deleteJobSeeker(id) {
+    const confirmDelete = confirm(`Are you sure you want to delete the job seeker with ID ${id}?`);
+    if (confirmDelete) {
+        try {
+            const response = await fetch(`http://localhost:8081/api/job-seeker/all-job-seekers/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json(); // Get the error response
+                console.error("Failed to delete job seeker:", errorData);
+                throw new Error(`Failed to delete job seeker: ${errorData.message || 'Unknown error'}`);
+            }
+
+            alert(`Job seeker with ID ${id} deleted`);
+            fetchJobSeekers(); // Refresh job seekers list
+        } catch (error) {
+            console.error("Error deleting job seeker:", error);
+        }
+    }
+}
+
+// Logout function
+// function logout() {
+//     localStorage.removeItem('token');
+//     window.location.href = "/html/shared/login.html";
+// }
+
+// Attach event listener to logout button
+// document.getElementById('logoutBtn').addEventListener('click', logout);
+
+// Filter job seekers by search query
+function filterJobSeekers() {
+    const query = searchBar.value.toLowerCase();
+    const rows = document.querySelectorAll('#jobseekers-list tr');
+    rows.forEach((row) => {
+        const rowText = row.innerText.toLowerCase();
+        row.style.display = rowText.includes(query) ? '' : 'none';
+    });
+}
+
+// Initialize the page
+fetchJobSeekers();
+
+
+    </script>
+</body>
+</html>

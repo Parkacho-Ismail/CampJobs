@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Seeker Details</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .nav-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px;
+        background-color: #161744;
+        color: white;
+        height: 50px;
+        position: relative;
+        z-index: 1000; /* Ensures it stays on top */
+    }
+        .nav-links {
+        list-style: none;
+        display: flex;
+        gap: 15px;
+    }
+
+    .nav-links li {
+        display: flex;
+    }
+
+    .nav-links a {
+        display: block;
+        position: relative;
+        padding: 10px 15px;
+        text-decoration: none;
+        color: white;
+        font-size: 1rem;
+        transition: transform 0.3s ease, background-color 0.3s ease;
+        pointer-events: auto; /* Ensure links are clickable */
+    }
+
+    .nav-links li:not(:last-child)::after {
+        content: "";
+        position: absolute;
+        right: 0;
+        top: 50%;
+        height: 60%;
+        width: 2px;
+        background-color: white;
+        transform: translateY(-50%);
+    }
+
+    .nav-links a:hover {
+        transform: scale(1.2);
+        text-decoration: underline;
+        cursor: pointer;
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+         /* .logo {
+            width: 120px;
+            height: 120px;
+            background-color: #ddd;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 20px auto;
+            border-radius: 50%;
+            overflow: hidden;
+            position: relative;
+        } */
+
+        /* .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }  */
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        input[readonly] {
+            background-color: #f9f9f9;
+            cursor: not-allowed;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4a4af4;
+            color: white;
+        }
+
+        button:hover {
+            background-color: #3a3ad4;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 400px;
+            max-width: 90%;
+        }
+
+        .modal-content input {
+            margin-bottom: 10px;
+        }
+
+        .modal-content button {
+            margin-top: 10px;
+        }
+            /* Style for the two-column form layout */
+    .modal-content {
+        width: 600px; /* Increased width to accommodate two columns */
+        max-width: 90%;
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px; /* Space between columns */
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 15px;
+    }
+
+    button {
+        flex: 1;
+        margin: 0 5px;
+    }
+    footer {
+        background-color: #161744;
+        color: white;
+        text-align: center;
+        padding: 10px;
+        margin-top: 20px;
+    }
+
+    .footer-content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .footer-content p {
+        margin: 0;
+    }
+
+    .social-links a {
+        color: white;
+        text-decoration: none;
+        margin: 0 10px;
+    }
+
+    .social-links a:hover {
+        color: orange;
+    }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="nav-container">
+            <h1 class="logo">Camp<span style="color: orange;">Jobs</span></h1>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="seekerhomepage.html">Home</a></li>
+                    <li><a href="seekerhomepage.html#job-cards">Jobs</a></li>
+                    <li><a href="seekerapplications.html">My Applications </a></li>
+                    <li><a href="seekereditdetails.html">My Profile</a></li>
+                    <li><a href="seekeraboutus.html">About Us</a></li>
+                    <li><a href="seekercontactus.html">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="user-info">
+                <div class="dropdown">
+                    <button class="dropbtn">Log out <i class="fas fa-sign-out-alt"></i></button>
+                    <div class="dropdown-content">
+                        <a href="#" onclick="confirmLogout()">Log Out</a>
+                    </div>
+                </div>
+            </div>
+        </div>   
+    </header>
+    <div class="container">
+        <!-- Logo Section -->
+        <!-- <div class="logo">
+            <img src="istockphoto-1173054931-612x612.jpg" alt="Logo" id="logoImage">
+        </div> -->
+
+        <!-- Job Seeker Details (Non-Editable) -->
+        <div id="seekerDetails">
+            <div class="form-group">
+                <label for="firstName">First name:</label>
+                <input type="text" id="firstName" readonly>
+            </div>
+            <div class="form-group">
+                <label for="lastName">Last name:</label>
+                <input type="text" id="lastName" readonly>
+            </div>
+            <div class="form-group">
+                <label for="gender">Gender:</label>
+                <input type="text" id="gender" readonly>
+            </div>
+            <div class="form-group">
+                <label for="nationality">Nationality:</label>
+                <input type="text" id="nationality" readonly>
+            </div>
+            <div class="form-group">
+                <label for="tel">Tel:</label>
+                <input type="tel" id="tel" readonly>
+            </div>
+            <div class="form-group">
+                <label for="dob">Date of birth:</label>
+                <input type="date" id="dob" readonly>
+            </div>
+            <button type="button" id="editButton">Edit Details</button>
+        </div>
+
+<!-- Modal for Editing Details -->
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <h2>Edit Details</h2>
+        <form id="editForm">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="editFirstName">First name:</label>
+                    <input type="text" id="editFirstName">
+                </div>
+                <div class="form-group">
+                    <label for="editLastName">Last name:</label>
+                    <input type="text" id="editLastName">
+                </div>
+                <div class="form-group">
+                    <label for="editGender">Gender:</label>
+                    <input type="text" id="editGender">
+                </div>
+                <div class="form-group">
+                    <label for="editNationality">Nationality:</label>
+                    <input type="text" id="editNationality">
+                </div>
+                <div class="form-group">
+                    <label for="editTel">Tel:</label>
+                    <input type="tel" id="editTel">
+                </div>
+                <div class="form-group">
+                    <label for="editdob">Date of birth:</label>
+                    <input type="date" id="editdob">
+                </div>
+            </div>
+            <div class="form-buttons">
+                <button type="button" id="saveEditButton">Save</button>
+                <button type="button" id="cancelEditButton">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+    </div>
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 CampJobs</p>
+            <div class="social-links">
+                <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook"></i></a>
+                <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', async function () {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        alert('Please log in first.');
+        window.location.href = '/html/shared/login.html';
+        return;
+    }
+
+    console.log("🔑 Token:", token);
+
+    let userId;
+    let seekerId = null; // Store seekerId globally
+
+    try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        userId = payload.userId;
+        console.log("✅ Retrieved User ID:", userId);
+    } catch (error) {
+        console.error("❌ Error decoding token:", error);
+        alert("Invalid session. Please log in again.");
+        window.location.href = '/login.html';
+        return;
+    }
+
+    // Fetch Job Seeker Details
+    async function fetchSeekerDetails(userId) {
+        try {
+            const response = await fetch(`http://localhost:8081/api/job-seeker/seeker/details/${userId}`, {
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Cache-Control": "no-cache"
+                }
+            });
+
+            if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+            
+            const seekerData = await response.json();
+            console.log("📢 Full API Response:", seekerData);
+
+            if (!seekerData || !seekerData.seekerId) throw new Error("Invalid seeker data received.");
+
+            seekerId = seekerData.seekerId; // ✅ Store seekerId globally
+
+            // Populate details form
+            document.getElementById('firstName').value = seekerData.firstName || '';
+            document.getElementById('lastName').value = seekerData.lastName || '';
+            document.getElementById('gender').value = seekerData.seekerGender || '';
+            document.getElementById('nationality').value = seekerData.seekerNat || '';
+            document.getElementById('tel').value = seekerData.seekerTel || '';
+            document.getElementById('dob').value = seekerData.seekerDob ? new Date(seekerData.seekerDob).toISOString().split('T')[0] : '';
+
+            // Populate edit modal
+            document.getElementById('editFirstName').value = seekerData.firstName || '';
+            document.getElementById('editLastName').value = seekerData.lastName || '';
+            document.getElementById('editGender').value = seekerData.seekerGender || '';
+            document.getElementById('editNationality').value = seekerData.seekerNat || '';
+            document.getElementById('editTel').value = seekerData.seekerTel || '';
+            document.getElementById('editdob').value = seekerData.seekerDob ? new Date(seekerData.seekerDob).toISOString().split('T')[0] : '';
+
+        } catch (error) {
+            console.error("❌ Failed to fetch job seeker details:", error);
+            alert(`Failed to load job seeker details: ${error.message}`);
+        }
+    }
+
+    // Open edit modal
+    document.getElementById('editButton').addEventListener('click', function () {
+        document.getElementById('editModal').style.display = 'flex';
+    });
+
+    // Close edit modal
+    document.getElementById('cancelEditButton').addEventListener('click', function () {
+        document.getElementById('editModal').style.display = 'none';
+    });
+
+    // Save edited details
+    document.getElementById('saveEditButton').addEventListener('click', async function () {
+        if (!seekerId) {
+            alert("Seeker ID not found. Cannot update details.");
+            return;
+        }
+
+        const updatedData = {
+            firstName: document.getElementById('editFirstName').value,
+            lastName: document.getElementById('editLastName').value,
+            seekerGender: document.getElementById('editGender').value,
+            seekerNat: document.getElementById('editNationality').value,
+            seekerTel: document.getElementById('editTel').value,
+            seekerDob: document.getElementById('editdob').value
+        };
+
+        console.log("📤 Sending Data:", updatedData);
+
+        try {
+    const response = await fetch(`http://localhost:8081/api/job-seeker/update/${seekerId}`, {
+        method: 'PUT',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updatedData),
+    });
+
+    const responseText = await response.text(); // Read response as text
+    console.log("🔄 API Response:", responseText);
+
+    if (response.ok) {
+        alert('Details updated successfully!');
+        window.location.reload();
+    } else {
+        throw new Error(`Update failed! Status: ${response.status} - ${responseText}`);
+    }
+} catch (error) {
+    console.error("❌ Failed to update details:", error);
+    alert(`Failed to update details: ${error.message}`);
+}
+
+    });
+
+    // Fetch details on page load
+    await fetchSeekerDetails(userId);
+});
+
+// Logout action
+function confirmLogout() {
+            if (confirm('Are you sure you want to log out?')) {
+                localStorage.removeItem('token');
+                window.location.href = '/html/shared/login.html';
+            }
+        }
+</script>
+
+    
+    
+</body>
+</html>

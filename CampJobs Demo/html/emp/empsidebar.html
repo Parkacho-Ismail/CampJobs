@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampJobs - Employer Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+ body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 250px;
+            background-color: #161744;
+            color: white;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: fixed;
+            transition: width 0.3s ease;
+        }
+
+        .sidebar.collapsed {
+            width: 70px;
+        }
+
+        .toggle-btn {
+            position: absolute;
+            top: 20px;
+            right: -15px;
+            background: #202142;
+            border: none;
+            color: white;
+            padding: 10px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 50%;
+            z-index: 1000;
+        }
+
+        .toggle-btn:hover {
+            background: #313365;
+        }
+
+        .sidebar-header {
+            text-align: center;
+            padding: 20px;
+            margin-top: 50px;
+        }
+
+        .sidebar-header img {
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+        }
+
+        .sidebar-header span {
+            display: block;
+            margin-top: 10px;
+        }
+
+        .sidebar-menu {
+            padding: 0;
+            list-style: none;
+            margin: 0;
+            text-align: center;
+        }
+
+        .sidebar-menu li {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .sidebar-menu li:hover {
+            background-color: #2E2E6A;
+        }
+
+        .sidebar-menu li i {
+            margin-right: 10px;
+            text-align: center;
+        }
+
+        .sidebar-menu a {
+            text-decoration: none;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        .sidebar-menu a:hover {
+            text-decoration: underline;
+        }
+
+        .sidebar-footer {
+            text-align: center;
+            padding: 15px;
+            font-size: 12px;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 250px;
+            flex-grow: 1;
+            background-color: white;
+            padding: 20px;
+            transition: margin-left 0.3s ease;
+            overflow-x: auto; /* Enable horizontal scrolling */
+            cursor: grab; /* Indicate draggable area */
+        }
+
+        .main-content.collapsed {
+            margin-left: 70px;
+        }
+
+        .main-content:active {
+            cursor: grabbing; /* Change cursor when dragging */
+        }
+
+        /* Logout Dialog */
+        .logout-dialog {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            z-index: 2000;
+        }
+
+        .logout-dialog button {
+            margin: 5px;
+        }    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <button class="toggle-btn" id="toggleBtn">☰</button>
+            <img src="profile.jpg" alt="User Profile">
+            <p>Welcome</p><span id="username">Loading...</span>
+        </div>
+        <ul class="sidebar-menu">
+            <li onclick="loadPage('/html/emp/&adminhomepage.html')"><i class="fas fa-home"></i> <span class="menu-text">Home</span></li>
+            <li onclick="loadPage('/html/emp/postjob.html')"><i class="fas fa-briefcase"></i> <span class="menu-text">Post Job</span></li>
+            <!-- <li onclick="loadPage('/html/emp/empjobs.html')"><i class="fas fa-tasks"></i> <span class="menu-text">My Jobs</span></li> -->
+             <li onclick="loadPage('/html/emp/empjobs.html')"><i class="fas fa-tasks"></i> <span class="menu-text">My Jobs</span></li>
+            <li onclick="loadPage('/html/emp/empeditdetails.html')"><i class="fas fa-user"></i> <span class="menu-text">My Profile</span></li>
+            <li onclick="showLogoutDialog()"><i class="fas fa-sign-out-alt"></i> <span class="menu-text">Log Out</span></li>
+        </ul>
+        <div class="sidebar-footer">
+            <a href="#" onclick="loadPage('termsofuse.html')">Terms of Use</a> & <a href="#" onclick="loadPage('privacypolicy.html')">Privacy Policy</a>
+            <p>&copy; CampJobs</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <!-- Content will be loaded dynamically here -->
+    </div>
+
+    <!-- Logout Dialog -->
+    <div class="logout-dialog" id="logoutDialog">
+        <p>Are you sure you want to log out?</p>
+        <button onclick="logout()">OK</button>
+        <button onclick="hideLogoutDialog()">Cancel</button>
+    </div>
+
+    <script>
+        const token = localStorage.getItem('token'); // Retrieve the token from localStorage
+
+        if (!token) {
+            // Redirect to login if no token is found
+            window.location.href = '/html/shared/login.html';
+        }
+
+        // Fetch user details using the token
+        async function fetchUserDetails() {
+    const token = localStorage.getItem('token'); // Ensure the token exists
+
+    if (!token) {
+        window.location.href = '/html/shared/login.html'; // Redirect if no token
+        return;
+    }
+
+    try {
+        const response = await fetch(`${window.location.origin}/api/user/details`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`Failed to fetch user details: ${response.statusText}`);
+        }
+
+        const user = await response.json();
+        document.getElementById('username').textContent = user.fullName || "Unknown User";
+    } catch (error) {
+        console.error('Error fetching user details:', error);
+    }
+}
+
+
+        // Load pages dynamically
+        async function loadPage(pageUrl) {
+    const mainContent = document.getElementById('mainContent');
+    mainContent.innerHTML = `<p>Loading...</p>`; // Show loading text
+
+    try {
+        const response = await fetch(`${window.location.origin}/${pageUrl}`, {
+            headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        });
+
+        if (!response.ok) throw new Error(`Failed to load page: ${response.statusText}`);
+
+        const html = await response.text();
+        mainContent.innerHTML = html;
+
+        // Execute scripts properly
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = html;
+        const scripts = tempDiv.querySelectorAll("script");
+
+        scripts.forEach(script => {
+            const newScript = document.createElement("script");
+            if (script.src) {
+                newScript.src = script.src;
+                newScript.async = true;
+            } else {
+                // Avoid redeclaring `token` by wrapping the script content in an IIFE
+                newScript.textContent = `
+                    (function() {
+                        ${script.textContent}
+                    })();
+                `;
+            }
+            document.body.appendChild(newScript);
+        });
+
+    } catch (error) {
+        console.error('Error loading page:', error);
+        mainContent.innerHTML = `<p style="color: red;">Error loading page: ${error.message}</p>`;
+    }
+}
+
+
+
+        // Show Logout Dialog
+        function showLogoutDialog() {
+            document.getElementById('logoutDialog').style.display = 'block';
+        }
+
+        // Hide Logout Dialog
+        function hideLogoutDialog() {
+            document.getElementById('logoutDialog').style.display = 'none';
+        }
+
+        // Logout action
+        function logout() {
+            localStorage.removeItem('token'); // Clear the token
+            window.location.href = '/html/shared/login.html'; // Redirect to login page
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchUserDetails(); // Fetch and display user details
+            loadPage('emp&adminhomepage.html'); // Load the default page
+        });
+
+        // Sidebar toggle logic (same as before)
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.getElementById('mainContent');
+        const toggleBtn = document.getElementById('toggleBtn');
+
+        toggleBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('collapsed');
+            mainContent.classList.toggle('collapsed');
+            const menuTexts = document.querySelectorAll('.menu-text');
+            menuTexts.forEach(text => text.style.display = sidebar.classList.contains('collapsed') ? 'none' : 'inline');
+        });
+
+        // Draggable main content logic (same as before)
+        let isDragging = false;
+        let startX, scrollLeft;
+
+        mainContent.addEventListener('mousedown', (e) => {
+            if (sidebar.classList.contains('collapsed')) {
+                isDragging = true;
+                startX = e.pageX - mainContent.offsetLeft;
+                scrollLeft = mainContent.scrollLeft;
+                mainContent.style.cursor = 'grabbing';
+            }
+        });
+
+        mainContent.addEventListener('mouseleave', () => {
+            if (isDragging) {
+                isDragging = false;
+                mainContent.style.cursor = 'grab';
+            }
+        });
+
+        mainContent.addEventListener('mouseup', () => {
+            if (isDragging) {
+                isDragging = false;
+                mainContent.style.cursor = 'grab';
+            }
+        });
+
+        mainContent.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            e.preventDefault();
+            const x = e.pageX - mainContent.offsetLeft;
+            const walk = (x - startX) * 2; // Adjust scroll speed
+            mainContent.scrollLeft = scrollLeft - walk;
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Applicant Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .nav-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px;
+        background-color: #161744;
+        color: white;
+        height: 50px;
+        position: relative;
+        z-index: 1000; /* Ensures it stays on top */
+    }
+
+    .logo {
+        font-size: 24px;
+    }
+
+    .logo span {
+        color: orange;
+    }
+
+    .nav-links {
+        list-style: none;
+        display: flex;
+        gap: 15px;
+    }
+
+    .nav-links li {
+        display: flex;
+    }
+
+    .nav-links a {
+        display: block;
+        position: relative;
+        padding: 10px 15px;
+        text-decoration: none;
+        color: white;
+        font-size: 1rem;
+        transition: transform 0.3s ease, background-color 0.3s ease;
+        pointer-events: auto; /* Ensure links are clickable */
+    }
+
+    .nav-links li:not(:last-child)::after {
+        content: "";
+        position: absolute;
+        right: 0;
+        top: 50%;
+        height: 60%;
+        width: 2px;
+        background-color: white;
+        transform: translateY(-50%);
+    }
+
+    .nav-links a:hover {
+        transform: scale(1.2);
+        text-decoration: underline;
+        cursor: pointer;
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-bar {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .search-bar input {
+            width: 100%;
+            max-width: 600px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+
+        .status {
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+
+        .status.pending {
+            background-color: blue;
+            color: white;
+        }
+
+        .status.shortlisted {
+            background-color: yellow;
+            color: black;
+        }
+
+        .status.rejected {
+            background-color: red;
+            color: white;
+        }
+
+        .status.accepted {
+            background-color: green;
+            color: white;
+        }
+
+        .actions button {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .actions .edit {
+            background-color: blue;
+            color: white;
+        }
+
+        .actions .withdraw {
+            background-color: red;
+            color: white;
+        }
+
+        .no-applications {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #666;
+        }
+        footer {
+        background-color: #161744;
+        color: white;
+        text-align: center;
+        padding: 10px;
+        margin-top: 20px;
+    }
+
+    .footer-content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .footer-content p {
+        margin: 0;
+    }
+
+    .social-links a {
+        color: white;
+        text-decoration: none;
+        margin: 0 10px;
+    }
+
+    .social-links a:hover {
+        color: orange;
+    }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="nav-container">
+            <h1 class="logo">Camp<span>Jobs</span></h1>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="seekerhomepage.html">Home</a></li>
+                    <li><a href="seekerhomepage.html#job-cards">Jobs</a></li>
+                    <li><a href="seekerapplications.html">My Applications </a></li>
+                    <li><a href="seekereditdetails.html">My Profile</a></li>
+                    <li><a href="seekeraboutus.html">About Us</a></li>
+                    <li><a href="seekercontactus.html">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="user-info">
+                <div class="dropdown">
+                    <button class="dropbtn">Log out <i class="fas fa-sign-out-alt"></i></button>
+                    <div class="dropdown-content">
+                        <a href="#" onclick="confirmLogout()">Log Out</a>
+                    </div>
+                </div>
+            </div>
+        </div>   
+    </header>
+    <div class="container">
+        <div class="search-bar">
+            <input type="text" id="search" placeholder="Search here...">
+        </div>
+
+        <table id="applications-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Job</th>
+                    <!-- <th>Applicant</th> -->
+                    <th>Resume</th>
+                    <th>Letter</th>
+                    <th>Certificate</th>
+                    <th>ID Image</th>
+                    <th>Applied At</th>
+                    <th>Status</th>
+                    <th colspan="2">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Backend: Render rows dynamically from the database here -->
+            </tbody>
+        </table>
+
+        <div class="no-applications" id="no-applications">You don't have any applications currently</div>
+    </div>
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 CampJobs</p>
+            <div class="social-links">
+                <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook"></i></a>
+                <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </footer>
+    <script>
+        document.addEventListener("DOMContentLoaded", async function () {
+            const applicationsTable = document.getElementById("applications-table").getElementsByTagName("tbody")[0];
+            const noApplications = document.getElementById("no-applications");
+            const searchInput = document.getElementById("search");
+        
+            // ✅ Retrieve userId & token from localStorage
+            const userId = localStorage.getItem("userId");
+            const token = localStorage.getItem("token");
+        
+            if (!userId || !token) {
+                alert("Session expired. Please log in again.");
+                window.location.href = "/html/shared/login.html"; // Redirect to login page
+                return;
+            }
+        
+            console.log("✅ Retrieved User ID:", userId);
+        
+            try {
+                // ✅ Fetch Seeker ID once
+                const seekerId = await fetchSeekerId(userId);
+                if (!seekerId) {
+                    console.error("🚨 Seeker ID retrieval failed.");
+                    return;
+                }
+        
+                // ✅ Fetch Applications
+                let applications = await fetchApplications(seekerId);
+                renderApplications(applications);
+        
+                // 🔍 Add search functionality
+                searchInput.addEventListener("input", function () {
+                    const query = searchInput.value.toLowerCase();
+                    const filtered = applications.filter(app =>
+                        app.jobTitle.toLowerCase().includes(query) ||
+                        app.appStatus.toLowerCase().includes(query)
+                    );
+                    renderApplications(filtered);
+                });
+        
+            } catch (error) {
+                console.error("❌ Error loading job applications:", error);
+            }
+        });
+        
+        // ✅ Fetch Seeker ID
+        async function fetchSeekerId(userId) {
+            const token = localStorage.getItem("token");
+            if (!token) return null;
+        
+            try {
+                const response = await fetch(`http://localhost:8081/api/job-seeker/user/${userId}`, {
+                    headers: { "Authorization": `Bearer ${token}`, "Content-Type": "application/json" }
+                });
+        
+                if (!response.ok) {
+                    console.error("❌ Failed to fetch Seeker ID:", response.status);
+                    return null;
+                }
+        
+                const seeker = await response.json();
+                console.log("📌 API Response for Seeker ID:", seeker); // Log response
+        
+                // 🔹 Handle both object-based and direct number responses
+                if (typeof seeker === "number") {
+                    return seeker; // API returned direct number
+                } else if (seeker && seeker.seekerId) {
+                    return seeker.seekerId; // API returned { seekerId: 6 }
+                } else {
+                    console.error("🚨 Seeker ID is missing in response!");
+                    return null;
+                }
+            } catch (error) {
+                console.error("❌ Error fetching Seeker ID:", error);
+                return null;
+            }
+        }
+        
+        // ✅ Fetch Applications
+        async function fetchApplications(seekerId) {
+            const token = localStorage.getItem("token");
+        
+            try {
+                const response = await fetch(`http://localhost:8081/api/application/seeker/${seekerId}`, {
+                    method: "GET",
+                    headers: { "Authorization": `Bearer ${token}`, "Content-Type": "application/json" }
+                });
+        
+                if (!response.ok) throw new Error(`Failed to fetch applications: ${response.status}`);
+        
+                const applications = await response.json();
+                return applications || []; // Ensure it returns an array
+            } catch (error) {
+                console.error("❌ Error fetching applications:", error);
+                return [];
+            }
+        }
+        
+        // ✅ Render Applications
+        function renderApplications(applications) {
+            const applicationsTable = document.getElementById("applications-table").getElementsByTagName("tbody")[0];
+            const noApplications = document.getElementById("no-applications");
+        
+            applicationsTable.innerHTML = "";
+        
+            if (!applications || applications.length === 0) {
+                noApplications.style.display = "block";
+                return;
+            }
+        
+            noApplications.style.display = "none";
+        
+            applications.forEach((app, index) => {
+            const row = applicationsTable.insertRow();
+            row.innerHTML = `
+                <td>${index + 1}</td>
+                <td>${app.jobTitle}</td>
+                <td><a href="#" onclick="viewFile('${app.resumeImg}')">Download</a></td>
+                <td><a href="#" onclick="viewFile('${app.letterImg}')">Download</a></td>
+                <td><a href="#" onclick="viewFile('${app.certImg}')">Download</a></td>
+                <td><a href="#" onclick="viewFile('${app.idImg}')">Download</a></td>
+                <td>${new Date(app.appliedAt).toLocaleDateString()}</td>
+                <td><span class="status ${app.appStatus.toLowerCase()}">${app.appStatus}</span></td>
+                <td class="actions"><button class="withdraw" onclick="withdrawApplication(${app.appId})">Withdraw</button></td>
+            `;
+        });
+        }
+        
+        // ✅ Withdraw Application
+        function withdrawApplication(appId) {
+    const confirmDelete = confirm(`⚠️ Are you sure you want to withdraw your application ID ${appId}? This action cannot be undone.`);
+    if (!confirmDelete) {
+        return; // Stop if the user cancels
+    }
+
+    const token = localStorage.getItem("token");
+
+    fetch(`http://localhost:8081/api/application/seeker/delete/${appId}`, {
+        method: "DELETE",
+        headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json"
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error("Failed to withdraw application.");
+        }
+        return response.text();
+    })
+    .then(message => {
+        alert("✅ Application successfully withdrawn.");
+        location.reload(); // Refresh page to reflect changes
+    })
+    .catch(error => {
+        alert(`❌ Error: ${error.message}`);
+    });
+}
+
+
+        
+        // ✅ Parse JWT Token
+        function parseJwt(token) {
+            if (!token) return null;
+        
+            try {
+                return JSON.parse(atob(token.split(".")[1]));
+            } catch (e) {
+                console.error("Invalid token format:", e);
+                return null;
+            }
+        }
+        
+        // Logout action
+        function confirmLogout() {
+            if (confirm('Are you sure you want to log out?')) {
+                localStorage.removeItem('token');
+                window.location.href = '/html/shared/login.html';
+            }
+        }
+        
+        // View file in modal
+        function viewFile(filename) {
+            const token = localStorage.getItem('token');
+        
+            if (!token) {
+                alert("You need to be logged in to view this file.");
+                return;
+            }
+        
+            const cleanedFilename = filename.replace(/^uploads\//, '').trim();
+            const encodedFilename = cleanedFilename.replace(/ /g, '%20'); // Replace spaces with %20
+            const url = `http://localhost:8081/api/application/download/${encodedFilename}`;
+        
+            fetch(url, {
+                method: 'GET',
+                mode: 'cors',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.blob(); 
+            })
+            .then(blob => {
+                const fileUrl = URL.createObjectURL(blob);
+                const fileType = blob.type;
+        
+                if (fileType.startsWith('image/')) {
+                    // Create modal container
+                    const modal = document.createElement('div');
+                    modal.id = 'imageModal';
+                    modal.style.position = 'fixed';
+                    modal.style.top = '0';
+                    modal.style.left = '0';
+                    modal.style.width = '100%';
+                    modal.style.height = '100%';
+                    modal.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+                    modal.style.display = 'flex';
+                    modal.style.justifyContent = 'center';
+                    modal.style.alignItems = 'center';
+                    modal.style.zIndex = '1000';
+        
+                    // Create close button
+                    const closeButton = document.createElement('span');
+                    closeButton.innerHTML = '&times;';
+                    closeButton.style.position = 'absolute';
+                    closeButton.style.top = '20px';
+                    closeButton.style.right = '30px';
+                    closeButton.style.fontSize = '30px';
+                    closeButton.style.color = 'white';
+                    closeButton.style.cursor = 'pointer';
+                    closeButton.onclick = () => document.body.removeChild(modal);
+        
+                    // Create image element
+                    const imgElement = document.createElement('img');
+                    imgElement.src = fileUrl;
+                    imgElement.style.maxWidth = '90%';
+                    imgElement.style.maxHeight = '90%';
+                    imgElement.style.borderRadius = '8px';
+        
+                    // Append elements
+                    modal.appendChild(closeButton);
+                    modal.appendChild(imgElement);
+                    document.body.appendChild(modal);
+                } else if (fileType === 'application/pdf') {
+                    window.open(fileUrl, '_blank');
+                } else {
+                    const link = document.createElement('a');
+                    link.href = fileUrl;
+                    link.download = cleanedFilename;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                }
+            })
+            .catch(error => {
+                console.error('Error viewing file:', error);
+                alert('Failed to load the file. Please try again.');
+            });
+        }
+        </script>  
+    
+</body>
+</html>

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company Details Form</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+    font-family: 'FontAwesome', sans-serif;
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.form-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 500px;
+    height: 100%;
+    font-size: medium;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.form-group {
+    margin-bottom: 10px;
+    width: 480px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.required {
+    color: red;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: #66afe9;
+    outline: none;
+    box-shadow: 0 0 8px rgba(102, 175, 233, 0.6);
+}
+
+.phone-input {
+    display: flex;
+    align-items: center;
+}
+
+#countryCode {
+    width: 80px;
+    margin-right: 10px;
+    text-align: center;
+}
+
+.error {
+    color: red;
+    font-size: 14px;
+    display: none;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #2606D7;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0e016e;
+}
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <form id="companyForm">
+            <div class="form-group">
+                <label for="companyName">Company Name <span class="required">*</span></label>
+                <input type="text" id="companyName" name="companyName" required>
+            </div>
+            <div class="form-group">
+                <label for="contact">Contact <span class="required">*</span></label>
+                <div class="phone-input">
+                    <select id="countryCode" name="countryCode" required>
+                        <option value="">Code</option>
+                        <option value="+254">+254 (Kenya)</option>
+                        <option value="+1">+1 (USA)</option>
+                        <option value="+44">+44 (UK)</option>
+                        <option value="+91">+91 (India)</option>
+                        <option value="+61">+61 (Australia)</option>
+                        <option value="+81">+81 (Japan)</option>
+                      </select>
+                      <input type="tel" id="tel" name="tel" placeholder="Phone number" required>
+                </div>
+                <span class="error" id="phoneError"></span>
+            </div>
+            <div class="form-group">
+                <label for="address">Address <span class="required">*</span></label>
+                <input type="text" id="address" name="address" required>
+            </div>
+            <div class="form-group">
+                <label for="industry">Industry <span class="required">*</span></label>
+                <select id="industry" name="industry" required>
+                    <option value="">Select Industry</option>
+                    <option value="Education">Education</option>
+                    <option value="Health">Health</option>
+                    <option value="Security">Security</option>
+                    <option value="Media">Media</option>
+                    <option value="Human Resource">Human Resource</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="website">Website</label>
+                <input type="url" id="website" name="website">
+            </div>
+            <div class="form-group">
+                <label for="description">Describe Company <span class="required">*</span></label>
+                <textarea id="description" name="description" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="logo">Upload Logo <span class="required">*</span></label>
+                <input type="file" id="logo" name="logo" accept="image/*" required>
+            </div>
+            <button type="submit">SUBMIT</button>
+        </form>
+    </div>
+     <script>
+document.getElementById('companyForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    if (validateForm()) {
+        saveData();
+        window.location.href = 'landingpage.html';
+    }
+});
+
+function validateForm() {
+    let isValid = true;
+    const phoneInput = document.getElementById('contact');
+    const phoneError = document.getElementById('phoneError');
+
+    if (phoneInput.value.length !== 9 || phoneInput.value.startsWith('0')) {
+        phoneError.textContent = 'Phone number should not start with zero and must be 9 digits.';
+        phoneError.style.display = 'block';
+        isValid = false;
+    } else {
+        phoneError.style.display = 'none';
+    }
+
+    return isValid;
+}
+
+function saveData() {
+    const formData = {
+        companyName: document.getElementById('companyName').value,
+        contact: document.getElementById('contact').value,
+        address: document.getElementById('address').value,
+        industry: document.getElementById('industry').value,
+        website: document.getElementById('website').value,
+        description: document.getElementById('description').value,
+        logo: document.getElementById('logo').value
+    };
+
+    // Here you would typically send the formData to a server to save in a database
+    // For example, using fetch API to send data to a backend endpoint
+    // fetch('/saveData', { method: 'POST', body: JSON.stringify(formData) })
+    // .then(response => response.json())
+    // .then(data => console.log(data))
+    // .catch(error => console.error('Error:', error));
+
+    console.log('Data to be saved:', formData);
+}
+
+// Real-time validation for phone number
+const telInput = document.getElementById('tel');
+const errorMessage = document.createElement('div');
+errorMessage.id = 'telError';
+errorMessage.style.color = 'red';
+errorMessage.style.fontSize = '12px';
+telInput.parentElement.appendChild(errorMessage);
+
+telInput.addEventListener('input', (event) => {
+  let telValue = telInput.value;
+  errorMessage.textContent = '';
+
+  // Ensure only numbers are entered
+  telInput.value = telValue.replace(/[^0-9]/g, '');
+  telValue = telInput.value;
+
+  // If the first character is 0, block further input
+  if (telValue.startsWith('0')) {
+    errorMessage.textContent = 'The phone number must not start with 0.';
+    telInput.value = '';
+    return;
+  }
+
+  // Limit input to 9 characters
+  if (telValue.length > 9) {
+    telInput.value = telValue.slice(0, 9);
+    errorMessage.textContent = 'The phone number must be exactly 9 digits.';
+    return;
+  }
+});
+     </script>
+</body>
+</html>

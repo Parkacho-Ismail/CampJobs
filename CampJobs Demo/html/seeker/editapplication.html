@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Job Details</title>
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: rgba(0, 0, 0, 0.5);
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .popup-form {
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      width: 450px;
+      padding: 20px;
+      position: relative;
+    }
+
+    .popup-form h2 {
+      margin-bottom: 20px;
+      font-size: 1.5rem;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #555;
+    }
+
+    .close-btn:hover {
+      color: #ff0000;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      font-weight: bold;
+      display: block;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 10px;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      margin-top: 5px;
+    }
+
+    .uploaded-file {
+      margin-top: 5px;
+      font-size: 0.9rem;
+      color: green;
+    }
+
+    .save-btn {
+      width: 100%;
+      padding: 10px;
+      background-color: #007bff;
+      color: white;
+      font-size: 1rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .save-btn:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="popup-form">
+    <!-- Close button for the form -->
+    <i class="fas fa-times close-btn" onclick="closeForm()"></i>
+    <h2>Edit the Job Details</h2>
+    <form id="editJobForm">
+      <!-- Simulated data from the database -->
+      <div class="form-group">
+        <label for="resume">Resume</label>
+        <input type="file" id="resume" name="resume" onchange="showUploadedFile('resume')" />
+        <div id="resume-uploaded" class="uploaded-file">Uploaded: example_resume.pdf</div>
+      </div>
+
+      <div class="form-group">
+        <label for="coverLetter">Cover Letter</label>
+        <input type="file" id="coverLetter" name="coverLetter" onchange="showUploadedFile('coverLetter')" />
+        <div id="coverLetter-uploaded" class="uploaded-file">Uploaded: example_coverletter.docx</div>
+      </div>
+
+      <div class="form-group">
+        <label for="certificate">Certificate</label>
+        <input type="file" id="certificate" name="certificate" onchange="showUploadedFile('certificate')" />
+        <div id="certificate-uploaded" class="uploaded-file">Uploaded: example_certificate.pdf</div>
+      </div>
+
+      <div class="form-group">
+        <label for="id">ID</label>
+        <input type="file" id="id" name="id" onchange="showUploadedFile('id')" />
+        <div id="id-uploaded" class="uploaded-file">Uploaded: example_id.png</div>
+      </div>
+
+      <button type="button" class="save-btn" onclick="saveChanges()">Save</button>
+    </form>
+  </div>
+
+  <script>
+    function closeForm() {
+      // Example logic for closing the form; you can adjust based on your implementation
+      document.querySelector('.popup-form').style.display = 'none';
+    }
+
+    function showUploadedFile(inputId) {
+      const input = document.getElementById(inputId);
+      const uploadedDiv = document.getElementById(`${inputId}-uploaded`);
+      if (input.files && input.files[0]) {
+        uploadedDiv.textContent = `Uploaded: ${input.files[0].name}`;
+      } else {
+        uploadedDiv.textContent = '';
+      }
+    }
+
+    function saveChanges() {
+      const form = document.getElementById('editJobForm');
+      const formData = new FormData(form);
+
+      // Simulated backend API endpoint
+      fetch('http://localhost:8080/updateJob', {
+        method: 'POST',
+        body: formData,
+      })
+        .then(response => {
+          if (response.ok) {
+            alert('Changes saved successfully!');
+            closeForm(); // Close the form after saving
+          } else {
+            alert('Failed to save changes. Please try again.');
+          }
+        })
+        .catch(error => {
+          alert('An error occurred: ' + error.message);
+        });
+    }
+  </script>
+</body>
+</html>

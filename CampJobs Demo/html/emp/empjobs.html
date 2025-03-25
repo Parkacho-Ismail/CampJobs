@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employer Jobs</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+    .nav-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px;
+        background-color: #161744;
+        color: white;
+        height: 50px;
+        position: relative;
+    z-index: 1000; /* Ensures it stays on top */
+    }
+
+    .logo {
+        font-size: 24px;
+    }
+
+    .logo span {
+        color: orange;
+    }
+
+    .nav-links {
+        list-style: none;
+        display: flex;
+        gap: 15px;
+    }
+
+    .nav-links li {
+        display: flex;
+    }
+
+    .nav-links a {
+        display: block;
+        position: relative;
+        padding: 10px 15px;
+        text-decoration: none;
+        color: white;
+        font-size: 1rem;
+        transition: transform 0.3s ease, background-color 0.3s ease;
+        pointer-events: auto; /* Ensure links are clickable */
+    }
+
+    .nav-links li:not(:last-child)::after {
+        content: "";
+        position: absolute;
+        right: 0;
+        top: 50%;
+        height: 60%;
+        width: 2px;
+        background-color: white;
+        transform: translateY(-50%);
+    }
+
+    .nav-links a:hover {
+        transform: scale(1.2);
+        text-decoration: underline;
+        cursor: pointer;
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+        .search-container {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .search-container input {
+            width: 50%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .job-table {
+            width: 90%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .job-table th, .job-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .job-table th {
+            background-color: #5a5a5a;
+            color: white;
+        }
+
+        .job-table td.status {
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .status.approved {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .status.pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .status.rejected {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-buttons button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .action-buttons .edit {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .action-buttons .edit:hover {
+            background-color: #0056b3;
+        }
+
+        .action-buttons .withdraw {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .action-buttons .withdraw:hover {
+            background-color: #a71d2a;
+        }
+
+        .no-jobs {
+            text-align: center;
+            margin: 40px;
+            font-size: 18px;
+            color: #555;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 50%;
+            border-radius: 10px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: black;
+        }
+
+        .modal-form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .modal-form input, .modal-form textarea {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .modal-form button {
+            padding: 10px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .modal-form button:hover {
+            background-color: #0056b3;
+        }
+        footer {
+        background-color: #161744;
+        color: white;
+        text-align: center;
+        padding: 10px;
+        margin-top: 20px;
+    }
+
+    .footer-content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .footer-content p {
+        margin: 0;
+    }
+
+    .social-links a {
+        color: white;
+        text-decoration: none;
+        margin: 0 10px;
+    }
+
+    .social-links a:hover {
+        color: orange;
+    }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="nav-container">
+            <h1 class="logo">Camp<span>Jobs</span></h1>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="emphomepage.html">Home</a></li>
+                    <li><a href="postjob.html">Post a Job</a></li>
+                    <li><a href="empjobs.html">My Jobs</a></li>
+                    <li><a href="empapplications.html">Applications</a></li>
+                    <li><a href="empeditdetails.html">My Profile</a></li>
+                    <li><a href="empaboutus.html">About Us</a></li>
+                    <li><a href="empcontactus.html">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="user-info">
+                <div class="dropdown">
+                    <button class="dropbtn">Log out <i class="fas fa-sign-out-alt"></i></button>
+                    <div class="dropdown-content">
+                        <a href="#" onclick="confirmLogout()">Log Out</a>
+                    </div>
+                </div>
+            </div>
+        </div>   
+    </header>
+<div class="search-container">
+    <input type="text" id="search" placeholder="Search here..." oninput="filterJobs()">
+</div>
+
+<div id="job-container"></div>
+
+<!-- Modal for Edit Job -->
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <form id="editJobForm" class="modal-form">
+            <input type="text" id="editJobTitle" placeholder="Job Title" required>
+            <input type="text" id="editJobType" placeholder="Job Type" required>
+            <input type="text" id="editJobLocation" placeholder="Location" required>
+            <input type="number" id="editJobSalary" placeholder="Salary" required>
+            <input type="date" id="editExpiryDate" required>
+            <textarea id="editJobDesc" placeholder="Description" required></textarea>
+            <textarea id="editJobReqs" placeholder="Requirements" required></textarea>
+            <button type="submit">Save</button>
+        </form>
+    </div>
+</div>
+<footer>
+    <div class="footer-content">
+        <p>&copy; 2025 CampJobs</p>
+        <div class="social-links">
+            <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook"></i></a>
+            <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+        </div>
+    </div>
+</footer>
+<script>
+    const token = localStorage.getItem('token'); // Retrieve the token from localStorage
+
+    if (!token) {
+        // Redirect to login if no token is found
+        window.location.href = '/html/shared/login.html';
+    }
+
+    // Decode the token to get the email
+    function getEmailFromToken(token) {
+        try {
+            const payload = JSON.parse(atob(token.split('.')[1])); // Decode the token payload
+            return payload.sub; // Assuming the email is stored in the "sub" field of the token
+        } catch (error) {
+            console.error('Error decoding token:', error);
+            return null;
+        }
+    }
+
+    // Fetch jobs for the employer using their email
+    async function fetchJobs(email) {
+        try {
+            const response = await fetch(`http://localhost:8081/api/job/my-jobs?email=${email}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to fetch jobs');
+            }
+
+            const jobs = await response.json();
+            return jobs;
+        } catch (error) {
+            console.error('Error fetching jobs:', error);
+            alert('Failed to load jobs. Please try again.');
+        }
+    }
+
+    // Fetch application count for a job
+    async function fetchApplicationCount(jobId) {
+        try {
+            const response = await fetch(`http://localhost:8081/api/job/applications/count/${jobId}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to fetch application count');
+            }
+
+            const count = await response.json();
+            return count;
+        } catch (error) {
+            console.error('Error fetching application count:', error);
+            return 0;
+        }
+    }
+
+    // Render jobs in the table
+    async function renderJobs(jobs) {
+        const container = document.getElementById('job-container');
+        container.innerHTML = '';
+
+        if (jobs.length === 0) {
+            container.innerHTML = '<div class="no-jobs">You don\'t have any jobs currently</div>';
+            return;
+        }
+
+        let tableHTML = '<table class="job-table">';
+        tableHTML += 
+            `<thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Job Title</th>
+                    <th>Job Type</th>
+                    <th>Location</th>
+                    <th>Salary</th>
+                    <th>Expiry Date</th>
+                    <th>Description</th>
+                    <th>Requirements</th>
+                    <th>Applications</th>
+                    <th>Status</th>
+                    <th>Posted At</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>`;
+
+                let rowNumber = 1; // Initialize counter starting from 1
+
+for (const job of jobs) {
+    const applicationCount = await fetchApplicationCount(job.jobId);
+    tableHTML += 
+        `<tr>
+            <td>${rowNumber}</td> <!-- Display sequential number -->
+            <td>${job.jobTitle}</td>
+            <td>${job.jobType}</td>
+            <td>${job.jobLocation}</td>
+            <td>${job.jobSalary}</td>
+            <td>${new Date(job.expiryDate).toLocaleDateString()}</td>
+            <td>${job.jobDesc}</td>
+            <td>${job.jobReqs}</td>
+            <td>${applicationCount}</td>
+            <td class="status ${job.jobStatus.toLowerCase()}">${job.jobStatus}</td>
+            <td>${new Date(job.postedAt).toLocaleDateString()}</td>
+            <td class="action-buttons">
+                <button class="edit" onclick="openEditModal(${job.jobId})">Edit</button>
+                <button class="withdraw" onclick="withdrawJob(${job.jobId})">Withdraw</button>
+            </td>
+        </tr>`;
+    rowNumber++; // Increment the counter for the next row
+}
+
+        tableHTML += '</tbody></table>';
+        container.innerHTML = tableHTML;
+    }
+
+    // Open edit modal
+    async function openEditModal(jobId) {
+        try {
+            const response = await fetch(`http://localhost:8081/api/job/details/${jobId}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to fetch job details');
+            }
+
+            const job = await response.json();
+            document.getElementById('editJobTitle').value = job.jobTitle;
+            document.getElementById('editJobType').value = job.jobType;
+            document.getElementById('editJobLocation').value = job.jobLocation;
+            document.getElementById('editJobSalary').value = job.jobSalary;
+            document.getElementById('editExpiryDate').value = new Date(job.expiryDate).toISOString().split('T')[0];
+            document.getElementById('editJobDesc').value = job.jobDesc;
+            document.getElementById('editJobReqs').value = job.jobReqs;
+
+            document.getElementById('editJobForm').onsubmit = (e) => {
+                e.preventDefault();
+                updateJob(jobId);
+            };
+
+            document.getElementById('editModal').style.display = 'block';
+        } catch (error) {
+            console.error('Error fetching job details:', error);
+            alert('Failed to load job details. Please try again.');
+        }
+    }
+
+    // Close modal
+    function closeModal() {
+        document.getElementById('editModal').style.display = 'none';
+    }
+
+    // Update job
+async function updateJob(jobId) {
+    const expiryDate = document.getElementById('editExpiryDate').value;
+    const expiryDateTime = `${expiryDate}T00:00:00`; // Append time component to the date
+
+    const jobData = {
+        jobTitle: document.getElementById('editJobTitle').value,
+        jobType: document.getElementById('editJobType').value,
+        jobLocation: document.getElementById('editJobLocation').value,
+        jobSalary: document.getElementById('editJobSalary').value,
+        expiryDate: expiryDateTime, // Use the formatted date-time string
+        jobDesc: document.getElementById('editJobDesc').value,
+        jobReqs: document.getElementById('editJobReqs').value
+        // Do not include job_status in the payload
+    };
+
+    try {
+        const response = await fetch(`http://localhost:8081/api/job/update/${jobId}`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(jobData)
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to update job');
+        }
+
+        closeModal();
+        const email = getEmailFromToken(token);
+        const jobs = await fetchJobs(email);
+        renderJobs(jobs);
+        alert('The job was updated successfully')
+    } catch (error) {
+        console.error('Error updating job:', error);
+        alert('Failed to update job. Please try again.');
+    }
+}
+
+    // Withdraw job
+    async function withdrawJob(jobId) {
+        if (confirm('Are you sure you want to withdraw this job?')) {
+            try {
+                const response = await fetch(`http://localhost:8081/api/job/delete/${jobId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to withdraw job');
+                }
+               alert('The job was deleted successfully')
+                // Refresh the job list
+                const email = getEmailFromToken(token);
+                const jobs = await fetchJobs(email);
+                renderJobs(jobs);
+            } catch (error) {
+                console.error('Error withdrawing job:', error);
+                alert('Failed to withdraw job. Please try again.');
+            }
+        }
+    }
+
+    // Filter jobs
+    async function filterJobs() {
+        const query = document.getElementById('search').value.toLowerCase();
+        const email = getEmailFromToken(token);
+        const jobs = await fetchJobs(email);
+        const filteredJobs = jobs.filter(job => job.jobTitle.toLowerCase().includes(query));
+        renderJobs(filteredJobs);
+    }
+
+    // Initialize the page
+    document.addEventListener('DOMContentLoaded', async () => {
+        const email = getEmailFromToken(token); // Get email from the token
+        if (!email) {
+            alert('Invalid token. Please log in again.');
+            window.location.href = '/html/shared/login.html';
+            return;
+        }
+
+        const jobs = await fetchJobs(email); // Fetch jobs for the employer
+        renderJobs(jobs); // Render the jobs
+
+        function confirmLogout() {
+            if (confirm('Are you sure you want to log out?')) {
+                localStorage.removeItem('token');
+                window.location.href = '/html/shared/login.html';
+            }
+        }
+    });
+</script>
+
+</body>
+</html>

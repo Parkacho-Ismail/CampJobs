@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Details Form</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+}
+
+.popup-form {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    width: 45%;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin-top: 10px;
+}
+
+input, textarea {
+    margin-top: 5px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #3434C8;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #080342;
+}
+    </style>
+</head>
+<body>
+    <div class="popup-form" id="jobForm">
+        <span class="close-btn" id="closeBtn">&times;</span>
+        <form id="jobDetailsForm">
+            <label for="jobTitle">Job Title:</label>
+            <input type="text" id="jobTitle" name="jobTitle">
+
+            <label for="jobType">Job Type:</label>
+            <input type="text" id="jobType" name="jobType">
+
+            <label for="location">Location:</label>
+            <input type="text" id="location" name="location">
+
+            <label for="salary">Salary:</label>
+            <input type="text" id="salary" name="salary">
+
+            <label for="expiryDate">Expiry Date:</label>
+            <input type="text" id="expiryDate" name="expiryDate" disabled>
+
+            <label for="jobDescription">Job Description:</label>
+            <textarea id="jobDescription" name="jobDescription"></textarea>
+
+            <label for="jobRequirements">Job Requirements:</label>
+            <textarea id="jobRequirements" name="jobRequirements"></textarea>
+
+            <button type="button" id="saveBtn">Save</button>
+        </form>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+document.getElementById('closeBtn').addEventListener('click', function() {
+    document.getElementById('jobForm').style.display = 'none';
+});
+
+document.getElementById('saveBtn').addEventListener('click', function() {
+    if (confirm('Are you sure you want to save the changes?')) {
+        const formData = {
+            jobTitle: document.getElementById('jobTitle').value,
+            jobType: document.getElementById('jobType').value,
+            location: document.getElementById('location').value,
+            salary: document.getElementById('salary').value,
+            jobDescription: document.getElementById('jobDescription').value,
+            jobRequirements: document.getElementById('jobRequirements').value
+        };
+
+        // Here you would typically send formData to the server
+        // Example using fetch API:
+        fetch('/updateJob', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    }
+});
+
+// Example function to load data from the database
+function loadJobData() {
+    // Fetch data from the server
+    fetch('/getJobData')
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('jobTitle').value = data.jobTitle;
+            document.getElementById('jobType').value = data.jobType;
+            document.getElementById('location').value = data.location;
+            document.getElementById('salary').value = data.salary;
+            document.getElementById('expiryDate').value = data.expiryDate;
+            document.getElementById('jobDescription').value = data.jobDescription;
+            document.getElementById('jobRequirements').value = data.jobRequirements;
+        });
+}
+
+// Load job data when the page loads
+window.onload = loadJobData;
+    </script>
+</body>
+</html>
