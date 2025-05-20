@@ -77,7 +77,7 @@ public class ApplicationImpl implements ApplicationInterface {
         Users seeker = userRepository.findById(seekerId)
                 .orElseThrow(() -> new RuntimeException("Job seeker not found for ID: " + seekerId));
 
-        String seekerEmail = seeker.getEmail(); // ✅ Fetch email directly
+        String seekerEmail = seeker.getEmail(); // Fetch email directly
 
         // Check if job application already exists
         if (applicationRepository.existsByJob_JobIdAndJobSeeker_UserId(jobId, seekerId)) {
@@ -116,8 +116,7 @@ public class ApplicationImpl implements ApplicationInterface {
     }
 
     private void sendApplicationConfirmationEmail(String to, Job job) {
-        System.out.println("📧 Sending email to: " + to); // Debugging Log
-
+        System.out.println("📧 Sending email to: " + to); 
         String subject = "Job Application Submitted Successfully";
         String body = String.format(
                 "Dear Job Seeker,\n\n" +
@@ -130,44 +129,6 @@ public class ApplicationImpl implements ApplicationInterface {
         emailService.sendEmail(to, subject, body);
     }
 
-
-//    @Override
-//    public Application applyForJob(Long jobId, Long seekerId,
-//                                   MultipartFile resumeImg, MultipartFile letterImg,
-//                                   MultipartFile certImg, MultipartFile idImg,
-//                                   LocalDateTime appliedAt) {
-//
-//        // Check if job and user exist
-//        Job job = jobRepository.findById(jobId)
-//                .orElseThrow(() -> new RuntimeException("Job not found for ID: " + jobId));
-//        Users seeker = userRepository.findById(seekerId)
-//                .orElseThrow(() -> new RuntimeException("Job seeker not found for ID: " + seekerId));
-//
-//        // Check if the seeker has already applied for this job
-//        boolean alreadyApplied = applicationRepository.existsByJob_JobIdAndJobSeeker_UserId(jobId, seekerId);
-//        if (alreadyApplied) {
-//            throw new RuntimeException("You have already applied for this job.");
-//        }
-//
-//        // Create new job application
-//        Application application = new Application();
-//        application.setJob(job);
-//        application.setJobSeeker(seeker);
-//        application.setAppliedAt(appliedAt);
-//
-//        try {
-//            application.setResumeImg(saveFile(resumeImg));
-//            application.setLetterImg(saveFile(letterImg));
-//            application.setCertImg(saveFile(certImg));
-//            application.setIdImg(saveFile(idImg));
-//        } catch (IOException e) {
-//            throw new RuntimeException("File upload failed", e);
-//        }
-//
-//        return applicationRepository.save(application);  // ✅ Saving the application
-//    }
-
-
     @Override
     public List<ApplicationDTO> getApplicationsBySeeker(Long seekerId) {
         return null;
@@ -176,31 +137,10 @@ public class ApplicationImpl implements ApplicationInterface {
     //Each jobseeker to see their applications
     @Override
     public List<Application> getApplicationsByJobSeeker(String email) {
-//        return applicationRepository.findByJobSeekerEmail(email);
         List<Application> applications = applicationRepository.findByJobSeekerEmail(email);
         log.info("Applications found for {}: {}", email, applications.size());
         return applications;
     }
-
-//    @Override
-//    public List<Application> getApplicationsByEmployer(String email) {
-//        // Find employer (User) by email
-//        Users employerUser = userRepository.findByEmail(email)
-//                .orElseThrow(() -> new RuntimeException("Employer not found"));
-//
-//        // Get jobs posted by this employer
-//        List<Job> employerJobs = jobRepository.findByEmployer_User(employerUser);
-//
-//        if (employerJobs.isEmpty()) {
-//            throw new RuntimeException("No jobs found for this employer");
-//        }
-//
-//        // Find applications related to these jobs
-//        List<Application> applications = applicationRepository.findByJobIn(employerJobs);
-//
-//        log.info("Applications found for employer {}: {}", email, applications.size());
-//        return applications;
-//    }
 
     @Override
     public List<Application> getApplicationsByEmployer(String email) {
@@ -215,7 +155,6 @@ public class ApplicationImpl implements ApplicationInterface {
 
         List<Application> applications = applicationRepository.findByJobIn(employerJobs);
 
-        // Optionally, you can enrich the Application objects with additional details if needed
         applications.forEach(application -> {
             application.getJob().setJobTitle(application.getJob().getJobTitle());
             application.getJobSeeker().setFullName(application.getJobSeeker().getFullName());
@@ -248,7 +187,7 @@ public class ApplicationImpl implements ApplicationInterface {
 
         applicationRepository.save(application);
 
-        // ✅ Send email with custom message from frontend
+        // Send email with custom message from frontend
         sendApplicationStatusUpdateEmail(application, emailBody);
     }
 
@@ -258,23 +197,6 @@ public class ApplicationImpl implements ApplicationInterface {
 
         emailService.sendEmail(email, subject, emailBody); //Use email body from frontend
     }
-
-
-//    @Override
-//    public void updateApplicationStatus(Long appId, String newStatus) {
-//        Application application = applicationRepository.findById(appId)
-//                .orElseThrow(() -> new RuntimeException("Application not found"));
-//
-//        try {
-//            // Convert the String to ApplicationStatus enum
-//            Application.ApplicationStatus status = Application.ApplicationStatus.valueOf(newStatus.toUpperCase());
-//            application.setAppStatus(status);
-//        } catch (IllegalArgumentException e) {
-//            throw new RuntimeException("Invalid application status: " + newStatus);
-//        }
-//
-//        applicationRepository.save(application);
-//    }
 
     //seeker applications
     @Override
