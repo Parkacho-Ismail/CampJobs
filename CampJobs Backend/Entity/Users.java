@@ -37,21 +37,4 @@ public class Users {
     @JsonIgnore // Prevents recursive nesting
     private List<Application> applications;
 
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private Long userId;
-//
-//    private String fullName;
-//
-//    @Column(nullable = false, unique = true)
-//    private String email;
-//
-//    @Column(nullable = false)
-//    private String password;
-//
-//    @Column(nullable = false)
-//    private String role; // ADMIN, EMPLOYER, JOBSEEKER
-//
-//    @Column(nullable = false)
-//    private LocalDateTime createdAt = LocalDateTime.now();
 }
