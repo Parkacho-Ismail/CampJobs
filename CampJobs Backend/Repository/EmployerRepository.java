@@ -21,18 +21,8 @@ public interface EmployerRepository extends JpaRepository<Employer, Long> {
     Optional<Employer> findByUser(Users user);
     Optional<Employer> findByUserUserId(Long userId);
 
-    Optional<Employer> findByUser_Email(String email);  // ✅ Use the email from the User table
+    Optional<Employer> findByUser_Email(String email);  // Use the email from the User table
 
-    Optional<Employer> findByUser_UserId(Long userId); // ✅ Fix: Correct method signature
-
-
-
-
-    //If you want to find employers related to a Job Seeker, the method should be:
-//    List<Employer> findBySeekerId(Long seekerId);
-
-    //Or if a single employer is related to a job seeker:
-//    Optional<Employer> findByOptionalSeekerId(Long seekerId);
-
+    Optional<Employer> findByUser_UserId(Long userId); // Fix: Correct method signature
 
 }
