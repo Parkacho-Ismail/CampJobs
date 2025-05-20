@@ -24,13 +24,4 @@ public class EmployerDTO {
     private String empDesc;
     private String empLogo;
 
-//    private String empLogo;  // Base64 string for image
-//
-//    public String getEmplogo() {
-//        return empLogo;
-//    }
-//
-//    public void setSeekerImg(MultipartFile empLogo) {
-//        this.empLogo = String.valueOf(empLogo);
-//    }
 }
