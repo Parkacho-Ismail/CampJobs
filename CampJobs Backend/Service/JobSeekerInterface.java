@@ -11,28 +11,18 @@ import java.util.Optional;
 @Service
 
 public interface JobSeekerInterface {
-//    ResponseEntity<?> register(RegisterDTO registerDTO);
-//
-//    ResponseEntity<?> register(JobSeekerDTO jobSeekerDTO);
 
     JobSeeker saveJobSeeker(JobSeekerDTO jobSeekerDTO);
 
     List<JobSeeker> getAllJobSeekers();
+    
     JobSeeker getJobSeekerById(Long id);
-//    User getUserById(long id);
 
     Optional<JobSeeker> getSeekerByUserId(Long userId);
 
-//    Optional<JobSeeker> findByUserId(Long userId);// find seekerId from userId
-
     Long getSeekerIdByUserId(Long userId);
-
 
     void updateJobSeekerDetails(Long seekerId, JobSeekerDTO jobSeekerDTO);
      JobSeekerDTO getJobSeekerDetails(Long userId) ;
-
-
-
-
 
 }
