@@ -27,16 +27,6 @@ public class PasswordResetController {
         }
     }
 
-//    @PostMapping("/reset-password")
-//    public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordRequest request) {
-//        try {
-//            String response = passwordResetService.resetPassword(request.getToken(), request.getNewPassword());
-//            return ResponseEntity.ok(Map.of("message", response));
-//        } catch (RuntimeException e) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", e.getMessage()));
-//        }
-//    }
-
     @PostMapping("/reset-password")
     public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordRequest request) {
         if (request.getNewPassword() == null || request.getNewPassword().length() < 6) {
