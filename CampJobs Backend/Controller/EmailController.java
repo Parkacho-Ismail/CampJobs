@@ -19,16 +19,6 @@ public class EmailController {
         return ResponseEntity.ok("Email sent successfully!");
     }
 
-
-//    @PostMapping("/status/send")
-//    public ResponseEntity<String> sendEmail(
-//            @RequestParam String to,
-//            @RequestParam String subject,
-//            @RequestParam String body) {
-//        emailService.sendEmail(to, subject, body);
-//        return ResponseEntity.ok("Email sent successfully!");
-//    }
-
     @PostMapping("/status/send")
     public ResponseEntity<String> sendStatusEmail(
             @RequestParam String to,
