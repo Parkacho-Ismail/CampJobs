@@ -12,10 +12,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ApplicationDTO {
-    private Long appId;         // Application ID
-    private String jobTitle;    // Job title
-    private String employerName; // Employer name
-    private String seekerName;  // Job seeker name
+    private Long appId;         
+    private String jobTitle;    
+    private String employerName; 
+    private String seekerName;  
     private String resumeImg;
     private String letterImg;
     private String certImg;
