@@ -25,7 +25,7 @@ import java.util.Optional;
 public class JobImpl implements JobInterface {
 
     private final JobRepository jobRepository;
-    private final EmployerRepository employerRepository; // ✅ Mark as final
+    private final EmployerRepository employerRepository;
     private UserRepository userRepository;
     private final ApplicationRepository applicationRepository;
     private final EmailInterface emailService;
@@ -40,23 +40,6 @@ public class JobImpl implements JobInterface {
 
     @Override
     public ResponseEntity<Long> saveJob(JobDTO jobDTO) {
-//        Employer employer = employerRepository.findById(jobDTO.getEmpId())
-//                .orElseThrow(() -> new RuntimeException("Employer not found"));
-//
-//        Job job = new Job();
-//        job.setJobTitle(jobDTO.getJobTitle());
-//        job.setJobType(jobDTO.getJobType());
-//        job.setJobLocation(jobDTO.getJobLocation());
-//        job.setJobSalary(jobDTO.getJobSalary());
-//        job.setJobDesc(jobDTO.getJobDesc());
-//        job.setJobReqs(jobDTO.getJobReqs());
-//        job.setExpiryDate(jobDTO.getExpiryDate());
-//        job.setPostedAt(jobDTO.getPostedAt());
-//        job.setJobStatus(jobDTO.getJobStatus());
-//        job.setEmployer(employer); // ✅ Correctly set employer
-//
-//        Job savedJob = jobRepository.save(job);
-//        return ResponseEntity.ok(savedJob.getJobId());
         return  null;//to be deleted
     }
 
@@ -66,9 +49,6 @@ public class JobImpl implements JobInterface {
     }
 
     @Override
-//    public Job getJobById(Long id) {
-//        return jobRepository.findById(id).orElse(null);
-    //    }
     public Job getJobById(Long jobId) {
         return jobRepository.findById(jobId)
                 .orElse(null); // Return null if job is not found
@@ -151,14 +131,6 @@ public class JobImpl implements JobInterface {
 
         emailService.sendEmail(to, subject, body);
     }
-
-//    @Transactional
-//    @Override
-//    public void updateJobStatus(Long jobId, String jobStatus) {
-//        Job job = jobRepository.findById(jobId).orElseThrow(() -> new RuntimeException("Job not found"));
-//        job.setJobStatus(jobStatus);
-//        jobRepository.save(job);
-//    }
 
     @Override
     public int getApplicationCount(Long jobId) {
