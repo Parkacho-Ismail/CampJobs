@@ -21,8 +21,6 @@ public interface ApplicationInterface {
                                MultipartFile certImg, MultipartFile idImg,
                                LocalDateTime appliedAt);
 
-
-//    List<Application> getApplicationsBySeeker(Long seekerId);
     List<ApplicationDTO> getApplicationsBySeeker(Long seekerId);
 
     List<Application> getApplicationsByJobSeeker(String email);
@@ -30,11 +28,10 @@ public interface ApplicationInterface {
     List<Application> getApplicationsByEmployer(String email);
 
     List<Application> getApplicationsByEmployer(Long employerId);
-//     void updateApplicationStatus(Long appId, String newStatus);
+    
 void updateApplicationStatus(Long appId, String newStatus, String emailBody);
 
-
-    List<ApplicationDTO> getApplicationsBySeekerId(Long seekerId);//seeker applications
+    List<ApplicationDTO> getApplicationsBySeekerId(Long seekerId);
 
     void deleteApplication(Long appId);
 
