@@ -26,9 +26,9 @@ public class EmailServiceImpl implements EmailInterface {
             helper.setText(body, true); // Supports HTML emails
 
             mailSender.send(message);
-            log.info("✅ Email sent successfully to {}", to);
+            log.info("Email sent successfully to {}", to);
         } catch (MessagingException e) {
-            log.error("❌ Failed to send email to {}: {}", to, e.getMessage(), e);
+            log.error("Failed to send email to {}: {}", to, e.getMessage(), e);
         }
     }
 
