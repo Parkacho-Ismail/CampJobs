@@ -63,7 +63,6 @@ public class UserController {
         }
 
         // Generate JWT token if authentication is successful
-//        String token = jwtUtil.generateToken(loginDTO.getEmail());
         String token = jwtUtil.generateToken(user.getEmail(), user.getRole(), Math.toIntExact(user.getUserId()));
 
 
@@ -74,64 +73,10 @@ public class UserController {
                         "token", token,
                         "role", user.getRole(),
                         "email", user.getEmail(),
-                        "userId", user.getUserId()  // Include userId inside the data object
+                        "userId", user.getUserId()  
                 ))
                 .build());
     }
-
-
-
-
-//    @PostMapping("/login")
-//    public ResponseEntity<?> loginUser(@RequestBody LoginDTO loginDTO) {
-//        Optional<Users> optionalUser = userRepository.findByEmail(loginDTO.getEmail());
-//
-//        if (optionalUser.isEmpty()) {
-//            return ResponseEntity.ok().body(UniversalResponse.builder().status("01")
-//                    .message("Login failed..user not found").build());
-//        }
-//
-//        Users user = optionalUser.get();
-//
-//        // Check if password matches
-//        if (!passwordEncoder.matches(loginDTO.getPassword(), user.getPassword())) {
-//            return ResponseEntity.ok().body(UniversalResponse.builder().status("01")
-//                    .message("Login failed..Wrong Credentials").build());
-//        }
-//
-//        // Check if the role matches
-//        if (!user.getRole().equalsIgnoreCase(loginDTO.getRole())) {
-//            return ResponseEntity.ok().body(UniversalResponse.builder().status("01")
-//                    .message("Login failed..Incorrect Role").build());
-//        }
-//
-//        // Generate token if authentication is successful
-//        String token = jwtUtil.generateToken(loginDTO.getEmail());
-//
-//        return ResponseEntity.ok().body(UniversalResponse.builder().status("00")
-//                .message("Login Successful")
-//                .data(Map.of("token", token, "role", user.getRole(), "email", user.getEmail()))
-//                .build());
-//    }
-
-
-//    @PostMapping("/login")
-//
-//        public ResponseEntity<?> loginUser (@RequestBody LoginDTO loginDTO){
-//
-//        Optional<Users> optionalUser = userRepository.findByEmail(loginDTO.getEmail());
-//        if (optionalUser.isEmpty()){
-//            return ResponseEntity.ok().body(UniversalResponse.builder().status("01")
-//                    .message("Login failed..user not found").build());
-//        }
-//        if (!passwordEncoder.matches(loginDTO.getPassword(),optionalUser.get().getPassword())){
-//            return ResponseEntity.ok().body(UniversalResponse.builder().status("01")
-//                    .message("Login failed..Wrong Credentials").build());
-//        }
-//        String token = jwtUtil.generateToken(loginDTO.getEmail());
-//        return ResponseEntity.ok().body(UniversalResponse.builder().status("00")
-//                .message("Login Succesfull").data(token).build());
-//        }
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody RegisterDTO registerDTO) {
@@ -143,7 +88,7 @@ public class UserController {
         // Extract response body
         UniversalResponse responseBody = response.getBody();
 
-        // ✅ Ensure JSON Response
+        // Ensure JSON Response
         if (responseBody != null && responseBody.getData() instanceof Map) {
             Map<String, Object> dataMap = (Map<String, Object>) responseBody.getData();
             if (dataMap.containsKey("userId")) {
@@ -151,14 +96,11 @@ public class UserController {
             }
         }
 
-        // ✅ Return JSON instead of plain text
+        // Return JSON instead of plain text
         log.info("Incoming registration request: {}", registerDTO);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(Map.of("error", "User registration failed."));
     }
-
-
-
 
     @GetMapping("/get-all-users")
         public ResponseEntity<?> getAllUsers () {
@@ -172,7 +114,6 @@ public class UserController {
             userServiceInterface.deleteUser(id);
             return ResponseEntity.ok().body("User deleted successfully");
         } catch (Exception e) {
-            // Handle any errors or exceptions that occur during deletion
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting user");
         }
     }
@@ -183,7 +124,7 @@ public class UserController {
     }
 
 
-    @GetMapping("/fullname") // New endpoint
+    @GetMapping("/fullname") 
     public Optional<String> getUserFullName(@RequestParam Long userId) {
         return userService.getUserFullNameById(userId);
     }
