@@ -36,7 +36,7 @@ public class SecurityConfig {
         configuration.setAllowCredentials(true); // Allow credentials like cookies, authorization headers
         configuration.setExposedHeaders(List.of("Authorization")); // Expose the Authorization header
 
-        System.out.println("CORS Configuration Applied ✅");
+        System.out.println("CORS Configuration Applied");
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration); // Apply to all endpoints
