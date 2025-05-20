@@ -22,9 +22,6 @@ public interface JobInterface {
 
     void deleteJobById(Long jobId);
 
-
-
-
     @Transactional
     void updateJobStatus(Long jobId, String jobStatus);
 
@@ -33,6 +30,5 @@ public interface JobInterface {
     Job updateJob(Long jobId, JobDTO jobDTO);
 
         void updateExpiredJobs();
-
 
 }
