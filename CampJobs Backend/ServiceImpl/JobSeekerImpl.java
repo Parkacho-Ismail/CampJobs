@@ -83,11 +83,6 @@ public class JobSeekerImpl implements JobSeekerInterface {
         return jobSeekerRepository.findByUserUserId(userId);
     }
 
-//    @Override
-//    public Optional<JobSeeker> findByUserId(Long userId) {
-//        return jobSeekerRepository.findByUserId(userId);
-//    }
-
     @Override
     public Long getSeekerIdByUserId(Long userId) {
         return jobSeekerRepository.findByUser_UserId(userId)
