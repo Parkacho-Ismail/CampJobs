@@ -22,11 +22,6 @@ public class Employer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long empId;
 
-//    @OneToOne
-//    @JoinColumn(name = "user_id", nullable = false)
-//    @OnDelete(action = OnDeleteAction.CASCADE) // Ensures deletion when user is deleted
-//    private Users user;
-
     @OneToOne(cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JoinColumn(name = "user_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE) // Ensures deletion when user is deleted
