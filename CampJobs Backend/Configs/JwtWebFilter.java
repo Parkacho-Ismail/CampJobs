@@ -32,7 +32,7 @@ public class JwtWebFilter extends OncePerRequestFilter {
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             token = authHeader.substring(7).trim();
             username = jwtUtil.extractUsername(token);
-            Integer userId = jwtUtil.extractUserId(token);  // ✅ Extract userId
+            Integer userId = jwtUtil.extractUserId(token);  // Extract userId
             log.info("Extracted token for username: {}, User ID: {}", username,userId);
         } else {
             log.warn("Authorization header is missing or malformed");
@@ -43,7 +43,7 @@ public class JwtWebFilter extends OncePerRequestFilter {
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
                 if (jwtUtil.validateToken(token, userDetails)) {
-                    log.info("✅ Valid token, setting authentication for: {}", username);
+                    log.info("Valid token, setting authentication for: {}", username);
 
                     UsernamePasswordAuthenticationToken authToken =
                             new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
@@ -56,12 +56,12 @@ public class JwtWebFilter extends OncePerRequestFilter {
                     log.info("🔹 User Roles: {}", authentication.getAuthorities());
 
                 } else {
-                    log.warn("❌ Invalid token for username: {}", username);
+                    log.warn("Invalid token for username: {}", username);
                     response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid or expired token.");
                     return;
                 }
             } catch (Exception e) {
-                log.error("🚨 Error processing authentication for user: {}", username, e);
+                log.error("Error processing authentication for user: {}", username, e);
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Authentication error.");
                 return;
             }
@@ -70,28 +70,4 @@ public class JwtWebFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-
-//    @Override
-//    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-//        String token = null;
-//        String username = null;
-//        String authHeader = request.getHeader("Authorization");
-//
-//        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-//            token = authHeader.substring(7);
-//            username = jwtUtil.extractUsername(token);
-//        }
-//
-//        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-//            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-//
-//            if (jwtUtil.validateToken(token, userDetails)) {
-//                UsernamePasswordAuthenticationToken authToken =
-//                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-//                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-//                SecurityContextHolder.getContext().setAuthentication(authToken);
-//            }
-//        }
-//        filterChain.doFilter(request, response);
-//    }
 }
