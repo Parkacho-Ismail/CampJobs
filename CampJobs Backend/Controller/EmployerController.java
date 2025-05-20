@@ -50,7 +50,7 @@ public class EmployerController {
         this.applicationInterface = applicationInterface;
     }
 
-    // ✅ Save Employer Method with Image Upload
+    // Save Employer Method with Image Upload
     @PostMapping(value = "/save", consumes = {"multipart/form-data"})
     public ResponseEntity<?> saveEmployer(
             @RequestPart("employer") EmployerDTO employerDTO,
@@ -80,7 +80,6 @@ public class EmployerController {
         }
     }
 
-
     @GetMapping("/applications")
     public List<Application> getApplicationsForEmployer(Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
@@ -94,38 +93,14 @@ public class EmployerController {
         return applicationInterface.getApplicationsByEmployer(employer.get().getEmpId());
     }
 
-//    @GetMapping("/job/{jobId}/applications")
-//    public ResponseEntity<?> getApplicationsForJob(
-//            @AuthenticationPrincipal UserDetails userDetails,
-//            @PathVariable Long jobId) {
-//
-//        // Get logged-in employer's email
-//        String employerEmail = userDetails.getUsername();
-//        Users employerUser = userRepository.findByEmail(employerEmail)
-//                .orElseThrow(() -> new RuntimeException("Employer not found"));
-//
-//        // Fetch job posted by the employer (using Users instead of Employer)
-//        Job job = jobRepository.findByIdAndEmployer(jobId, employerUser)
-//                .orElseThrow(() -> new RuntimeException("Job not found or does not belong to you"));
-//
-//        // Retrieve applications for the job
-//        List<Application> applications = applicationRepository.findByJob(job);
-//
-//        return ResponseEntity.ok(applications);
-//    }
-
-
-
-
-
-    // ✅ Get All Employers
+    // Get All Employers
     @GetMapping("/all-employers")
     public ResponseEntity<List<Employer>> getAllEmployers() {
         List<Employer> employers = employerService.getAllEmployers();
         return ResponseEntity.ok(employers);
     }
 
-    // ✅ Get a Single Employer by ID
+    // Get a Single Employer by ID
     @GetMapping("/{id}")
     public ResponseEntity<Employer> getEmployer(@PathVariable Long id) {
         Employer employer = employerService.getEmployerById(id);
@@ -136,7 +111,7 @@ public class EmployerController {
         }
     }
 
-    // ✅ Serve Uploaded Employer Logos
+    // Serve Uploaded Employer Logos
     @GetMapping("/images/{filename}")
     public ResponseEntity<Resource> getImage(@PathVariable String filename) {
         try {
@@ -155,14 +130,14 @@ public class EmployerController {
         }
     }
 
-    // 1. Get employer ID using userId
+    // Get employer ID using userId
     @GetMapping("/getEmpId/{userId}")
     public ResponseEntity<Long> getEmployerId(@PathVariable Long userId) {
         Long empId = employerService.getEmployerIdByUserId(userId);
         return ResponseEntity.ok(empId);
     }
 
-    // 2. Get employer details by empId
+    // Get employer details by empId
     @GetMapping("/details/{empId}")
     public ResponseEntity<Employer> getEmployerDetails(@PathVariable Long empId) {
         Optional<Employer> employer = employerService.getEmployerDetails(empId);
@@ -170,7 +145,7 @@ public class EmployerController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // 3. Update employer details
+    // Update employer details
     @PutMapping("/update/{empId}")
     public ResponseEntity<Employer> updateEmployer(@PathVariable Long empId, @RequestBody EmployerDTO employerDTO) {
         Employer updatedEmployer = employerService.updateEmployer(empId, employerDTO);
