@@ -24,17 +24,9 @@ public class JobSeekerDTO {
     private String seekerNat;
     private String seekerTel;
     private LocalDate seekerDob;
-//    private MultipartFile seekerImg;
     @JsonIgnore
     private String seekerImg;
     private Users user;
 
-//    public MultipartFile getSeekerImg() {
-//        return seekerImg;
-//    }
-//
-//    public void setSeekerImg(MultipartFile seekerImg) {
-//        this.seekerImg = seekerImg;
-//    }
 }
 
