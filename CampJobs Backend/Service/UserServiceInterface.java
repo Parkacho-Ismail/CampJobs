@@ -23,6 +23,5 @@ public interface UserServiceInterface {
 
     Optional<String> getUserEmailById(Long userId);
 
-    Optional<String> getUserFullNameById(Long userId); // New method
-
+    Optional<String> getUserFullNameById(Long userId); 
 }
