@@ -31,7 +31,6 @@ public class JobDTO {
     private String jobReqs;
     private String jobStatus; //PENDING, APPROVED, REJECTED
 
-//    private LocalDateTime postedAt = LocalDateTime.now();
     private LocalDateTime postedAt = LocalDateTime.now(); // Default to now
 
     public JobDTO(Long jobId, String jobTitle, String jobType, String jobLocation, Double jobSalary, String jobDesc, String jobReqs, String jobStatus, LocalDateTime postedAt, LocalDateTime expiryDate) {
@@ -55,6 +54,4 @@ public class JobDTO {
     public String getFormattedExpiryDate() {
         return expiryDate != null ? expiryDate.format(FORMATTER) : null;
     }
-//    private Long EmpId;
-//    private Employer employer;
 }
