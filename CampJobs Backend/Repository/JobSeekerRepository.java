@@ -14,13 +14,9 @@ import java.util.Optional;
 @Repository
 public interface JobSeekerRepository extends JpaRepository<JobSeeker, Long>{
     Optional<JobSeeker> findByseekerId(Long seekerId);
-//    Optional<JobSeeker> findByuserId(Long seekerId);
     Optional<JobSeeker> findByUser(Users user);
 
-    Optional<JobSeeker> findByUser_UserId(Long userId); // ✅ Find job seeker by user ID
-
-
-//    List<Job> findByEmployerEmpId(Long empId);
+    Optional<JobSeeker> findByUser_UserId(Long userId); // Find job seeker by user ID
 
     @Query("SELECT s FROM JobSeeker s WHERE s.user.role = 'JOBSEEKER'")
     List<JobSeeker> findAll();
