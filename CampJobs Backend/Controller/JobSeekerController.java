@@ -38,7 +38,7 @@ public class JobSeekerController {
     }
 
 
-    // ✅ Corrected Job Seeker Save Method
+    // Corrected Job Seeker Save Method
     @PostMapping(value = "/save", consumes = {"multipart/form-data"})
     public ResponseEntity<?> saveJobSeeker(
             @RequestPart("jobSeeker") JobSeekerDTO jobSeekerDTO,
@@ -68,39 +68,16 @@ public class JobSeekerController {
         }
     }
 
-    // ✅ Get All Job Seekers
+    // Get All Job Seekers
     @GetMapping("/all-job-seekers")
     public ResponseEntity<List<JobSeeker>> getAllJobSeekers() {
         List<JobSeeker> jobSeekers = jobSeekerService.getAllJobSeekers();
         return ResponseEntity.ok(jobSeekers);
     }
 
-    // ✅ Get a Single Job Seeker by ID
-//    @GetMapping("/{seekerId}")
-//    public ResponseEntity<JobSeeker> getJobSeeker(@PathVariable("seekerId") Long seekerId) {  // ✅ Fixed
-//        JobSeeker jobSeeker = jobSeekerService.getJobSeekerById(seekerId);
-//        if (jobSeeker != null) {
-//            return ResponseEntity.ok(jobSeeker);
-//        } else {
-//            return ResponseEntity.notFound().build();
-//        }
-//    }
-//    @GetMapping("/user/{userId}")
-//    public ResponseEntity<?> getSeekerId(@PathVariable Long userId) {
-//        Long seekerId = jobSeekerService.getSeekerIdByUserId(userId);
-//
-//        if (seekerId == null) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-//                    .body(Collections.singletonMap("message", "JobSeeker not found for userId: " + userId));
-//        }
-//
-//        return ResponseEntity.ok(Collections.singletonMap("seekerId", seekerId));
-//    }
-
-
     @GetMapping("/user/{userId}")
     public Long getSeekerId(@PathVariable Long userId) {
-        System.out.println("🟢 Fetching job seeker with User ID: " + userId);
+        System.out.println("Fetching job seeker with User ID: " + userId);
         return jobSeekerService.getSeekerIdByUserId(userId);
     }
 
@@ -123,7 +100,7 @@ public class JobSeekerController {
         return ResponseEntity.ok("Job seeker details updated successfully");
     }
 
-    // ✅ Serve Uploaded Images
+    // Serve Uploaded Images
     @GetMapping("/images/{filename}")
     public ResponseEntity<Resource> getImage(@PathVariable String filename) {
         try {
