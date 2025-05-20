@@ -33,7 +33,7 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
 
     List<Application> findByJob_JobId(Long jobId); // Fetch applications for a specific job
 
-    void deleteByJob_JobId(Long jobId); // ✅ Custom delete method
+    void deleteByJob_JobId(Long jobId); // Custom delete method
 
     void deleteByJobSeeker_UserId(Long userId);
 
@@ -63,10 +63,7 @@ void deleteByAppId(Long appId);
 
     boolean existsByJobAndJobSeeker(Job job, Users jobSeeker);
 
-//    @Query("SELECT u.email FROM Application a " +
-//            "JOIN a.jobSeeker u " +
-//            "WHERE a.appId = :appId")
-//    String findJobSeekerEmailByAppId(@Param("appId") Long appId);
+
 @Query(value = "SELECT u.email FROM applications a " +
         "JOIN jobseeker js ON a.seeker_id = js.seeker_id " +
         "JOIN users u ON js.user_id = u.user_id " +
@@ -75,15 +72,3 @@ String findJobSeekerEmailByAppId(@Param("appId") Long appId);
 
 }
 
-
-//@Repository
-//public interface ApplicationRepository extends JpaRepository<Application, Long> {
-//    Optional<Application> findByappId(Long seekerId);
-//    //If you want to find all applications, the method should be:
-//    List<Application> findAll();
-//
-//    List<Application> findByJobSeeker(JobSeeker jobSeeker);
-//
-//    List<Application> findByJob(Job job);
-//
-//}
