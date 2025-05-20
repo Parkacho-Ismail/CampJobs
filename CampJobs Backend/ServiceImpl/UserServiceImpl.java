@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserServiceInterface {
     private final ApplicationRepository applicationRepository;
     private final JobRepository jobRepository;
     private final JobSeekerRepository jobSeekerRepository;
-    private final EmailInterface emailService; // ✅ Use the correct interface
+    private final EmailInterface emailService; //Use the correct interface
 
     @Override
     public ResponseEntity<UniversalResponse> register(RegisterDTO registerDTO) {
@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserServiceInterface {
 
         Users savedUser = userRepository.save(newUser);
 
-        // ✅ Send Registration Email
+        // Send Registration Email
         try {
             String subject = "Welcome to CampJobs!";
             String body = "Hello " + savedUser.getFullName() + ",\n\n" +
@@ -79,50 +79,6 @@ public class UserServiceImpl implements UserServiceInterface {
 
         return ResponseEntity.ok().body(response);
     }
-
-
-//    @Override
-//    public ResponseEntity<UniversalResponse> register(RegisterDTO registerDTO) {
-//        Optional<Users> optionalUser = userRepository.findByEmail(registerDTO.getEmail());
-//
-//        if (optionalUser.isPresent()) {
-//            return ResponseEntity.ok(
-//                    UniversalResponse.builder()
-//                            .status("01")
-//                            .message("User already exists... please login")
-//                            .data(null)
-//                            .build()
-//            );
-//        }
-//
-//        // Hash password before storing it
-//        String hashedPassword = passwordEncoder.encode(registerDTO.getPassword());
-//
-//        Users newUser = Users.builder()
-//                .fullName(registerDTO.getFullName())
-//                .email(registerDTO.getEmail())
-//                .role(registerDTO.getRole())
-//                .password(hashedPassword)
-//                .createdAt(LocalDateTime.now())
-//                .build();
-//
-//        Users savedUser = userRepository.save(newUser);
-//
-//        // ✅ Debugging Log
-//        log.info("Saved User: {}", savedUser);
-//
-//        if (savedUser.getUserId() == null) {
-//            log.error("User ID is null after saving! Check entity setup.");
-//        }
-//
-//        UniversalResponse response = UniversalResponse.builder()
-//                .status("00")
-//                .message("Registered Successfully... please login")
-//                .data(Map.of("userId", savedUser.getUserId()))
-//                .build();
-//
-//        return ResponseEntity.ok().body(response);
-//    }
 
     @Override
     public ResponseEntity<UniversalResponse> getAllUsers() {
@@ -161,28 +117,17 @@ public class UserServiceImpl implements UserServiceInterface {
         return false;
     }
 
-//    @Override
-//    @Transactional
-//    public void deleteUser(Long id) {
-//        // Optional: Check if the user exists before trying to delete
-//        if (userRepository.existsById(id)) {
-//            userRepository.deleteById(id);
-//        } else {
-//            throw new RuntimeException("User not found with ID: " + id);
-//        }
-//    }
-
     @Override
     @Transactional
     public void deleteUser(Long id) {
-        // ✅ 1. Delete applications related to the job seeker
+        //  Delete applications related to the job seeker
         Optional<JobSeeker> jobSeekerOpt = jobSeekerRepository.findByUser_UserId(id);
         jobSeekerOpt.ifPresent(jobSeeker -> {
             applicationRepository.deleteByJobSeeker_UserId(id);
             jobSeekerRepository.delete(jobSeeker);
         });
 
-        // ✅ 2. Delete employer and related jobs if the user is an employer
+        // Delete employer and related jobs if the user is an employer
         Optional<Employer> employerOpt = employerRepository.findByUser_UserId(id);
         if (employerOpt.isPresent()) {
             Employer employer = employerOpt.get();
@@ -202,7 +147,7 @@ public class UserServiceImpl implements UserServiceInterface {
             employerRepository.delete(employer);
         }
 
-        // ✅ 3. Finally, delete the user
+        // Finally, delete the user
         if (userRepository.existsById(id)) {
             userRepository.deleteById(id);
         } else {
