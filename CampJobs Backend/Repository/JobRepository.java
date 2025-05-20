@@ -24,7 +24,6 @@ public interface JobRepository extends JpaRepository<Job, Long> {
     List<Job> findAllWithEmployers();
 
     //Employer to find their job-posts
-//    List<Job> findByEmployerUserId(Long userId);
     List<Job> findByEmployerUserUserId(Long userId);
 
 
@@ -46,21 +45,9 @@ public interface JobRepository extends JpaRepository<Job, Long> {
     @Query("SELECT COUNT(a) FROM Application a WHERE a.job.jobId = :jobId")
     int countApplicationsByJobId(Long jobId);
 
-    //applications to a job
-//    Optional<Job> findByIdAndEmployer(Long jobId, Users employer);
-
-
-//    Optional<Job> findByIdAndEmployer_User_UserId(Long jobId, Long userId);
-//    Optional<Job> findByIdAndEmployer_User(Long jobId, Users employerUser);
-//    Optional<Job> findByIdAndEmployer(Long jobId, Employer employer);
-
     List<Job> findByEmployer_User(Users user);
 
     Optional<Job> findByJobIdAndEmployer_EmpId(Long jobId, Long empId);
-
-
-
-//    Optional<Job> findByIdAndEmployer(Long jobId, Employer employer);
 
     @Transactional
     @Modifying
@@ -83,12 +70,5 @@ public interface JobRepository extends JpaRepository<Job, Long> {
 
     long countByPostedAtBetween(LocalDateTime startDate, LocalDateTime endDate);
 
-
 }
-//public interface JobRepository extends JpaRepository<Job, Long> {
-//    //If you want to find all employers, the method should be:
-//    List<Job> findAll();
-//    Optional<Job> findById(Long id);
-//    List<Job> findByEmployer(Long employer);
-////    List<Job> findByEmployerEmpId(Long empId);
-//}
+
