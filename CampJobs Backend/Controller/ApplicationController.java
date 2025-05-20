@@ -83,7 +83,7 @@ public class ApplicationController {
         }
 
         try {
-            // ✅ Ensure `applicationService.applyForJob()` returns the saved application
+            // Ensure `applicationService.applyForJob()` returns the saved application
             Application application = applicationService.applyForJob(jobId, seekerId, resumeImg, letterImg, certImg, idImg, LocalDateTime.now());
 
             if (application == null || application.getJob() == null) {
@@ -91,7 +91,7 @@ public class ApplicationController {
                         .body(Collections.singletonMap("error", "Application saved but job data is missing."));
             }
 
-            // ✅ Get the job object from the application
+            // Get the job object from the application
             Job job = application.getJob();
 
             // Fetch the user's email
@@ -99,17 +99,17 @@ public class ApplicationController {
             if (user.isPresent()) {
                 String email = user.get().getEmail();
 
-                // ✅ Ensure email function is called with job title
+                // Ensure email function is called with job title
                 System.out.println("📧 Sending email to: " + email);
                 emailService.sendEmail(email, "Job Application Submitted",
                         String.format("Dear Job Seeker,\n\n" +
                                         "You have successfully applied for the job: '%s'.\n\n" +
                                         "We will notify you once there is an update on your application status.\n\n" +
                                         "Thank you for using CampJobs.\n\nBest Regards,\nCampJobs Team",
-                                job.getJobTitle()));  // ✅ Fix: Get job title properly
-                System.out.println("✅ Email sent successfully!");
+                                job.getJobTitle())); 
+                System.out.println("Email sent successfully!");
             } else {
-                System.err.println("❌ User not found for email sending.");
+                System.err.println("User not found for email sending.");
             }
 
             return ResponseEntity.ok(Collections.singletonMap("message", "Application submitted successfully!"));
@@ -119,33 +119,6 @@ public class ApplicationController {
                     .body(Collections.singletonMap("error", "Failed to apply for job: " + e.getMessage()));
         }
     }
-
-
-
-//    @PostMapping(value = "/apply/{jobId}/{userId}", consumes = {"multipart/form-data"})
-//    public ResponseEntity<Map<String, String>> applyForJob(
-//            @PathVariable Long jobId,
-//            @PathVariable Long userId,
-//            @RequestParam("resumeImg") MultipartFile resumeImg,
-//            @RequestParam("letterImg") MultipartFile letterImg,
-//            @RequestParam("certImg") MultipartFile certImg,
-//            @RequestParam("idImg") MultipartFile idImg) {
-//
-//        // Fetch seeker_id from the jobseeker table using userId
-//        Long seekerId = jobSeekerRepository.findSeekerIdByUserId(userId);
-//        if (seekerId == null) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-//                    .body(Collections.singletonMap("error", "Invalid user ID."));
-//        }
-//
-//        try {
-//            applicationService.applyForJob(jobId, seekerId, resumeImg, letterImg, certImg, idImg, LocalDateTime.now());
-//            return ResponseEntity.ok(Collections.singletonMap("message", "Application submitted successfully!"));
-//        } catch (Exception e) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-//                    .body(Collections.singletonMap("error", "Failed to apply for job: " + e.getMessage()));
-//        }
-//    }
 
 //for downloading images to front end
 @GetMapping("/download/{filename:.+}")
@@ -195,7 +168,7 @@ public ResponseEntity<byte[]> downloadFile(@PathVariable String filename) {
             @RequestBody Map<String, String> statusUpdate) {
 
         String newStatus = statusUpdate.get("status");
-        String emailBody = statusUpdate.get("emailBody"); // ✅ Get email body from frontend
+        String emailBody = statusUpdate.get("emailBody"); // Get email body from frontend
 
         try {
             applicationInterface.updateApplicationStatus(appId, newStatus, emailBody);
@@ -205,14 +178,6 @@ public ResponseEntity<byte[]> downloadFile(@PathVariable String filename) {
                     .body(Collections.singletonMap("error", "Failed to update status: " + e.getMessage()));
         }
     }
-
-
-//    @PostMapping("/updateStatus/{appId}")
-//    public ResponseEntity<Void> updateApplicationStatus(@PathVariable Long appId, @RequestBody Map<String, String> statusUpdate) {
-//        String newStatus = statusUpdate.get("status");
-//        applicationInterface.updateApplicationStatus(appId, newStatus);
-//        return ResponseEntity.ok().build();
-//    }
 
     @GetMapping("/my-applications")
     public ResponseEntity<List<Application>> getJobSeekerApplications(@AuthenticationPrincipal UserDetails userDetails) {
@@ -249,7 +214,6 @@ public ResponseEntity<byte[]> downloadFile(@PathVariable String filename) {
         applicationService.deleteApplication(appId);
         return ResponseEntity.ok("Application deleted successfully");
     }
-
 
     @GetMapping("/job-seeker-email/{appId}")
     public ResponseEntity<String> getJobSeekerEmail(@PathVariable Long appId) {
