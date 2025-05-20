@@ -20,7 +20,6 @@ import java.util.UUID;
 
 @Service
 @Slf4j
-//@NoArgsConstructor(force = true)
 public class EmployerImpl implements EmployerInterface {
     private final EmployerRepository employerRepository;
     private final UserRepository userRepository;
@@ -69,9 +68,6 @@ public class EmployerImpl implements EmployerInterface {
         }
 
         return employerRepository.save(employer);
-
-//        Employer savedEmployer = employerRepository.save(employer);
-//        return ResponseEntity.ok(savedEmployer.getEmpId()); // Return employer ID
     }
 
     @Override
